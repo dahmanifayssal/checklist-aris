@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist ARIS — Nexum Advisory</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#F5F0EE;color:#1a1a1a;font-size:14px}
+.page{max-width:760px;margin:30px auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+
+/* HEADER */
+.header{background:#4A1B0C;padding:30px 36px 24px;display:flex;justify-content:space-between;align-items:flex-start}
+.brand-name{font-size:26px;font-weight:700;color:#fff;letter-spacing:-0.5px}
+.brand-accent{color:#F0997B}
+.brand-sub{font-size:11px;color:#F0997B;letter-spacing:3px;text-transform:uppercase;margin-top:4px}
+.brand-line{width:36px;height:2px;background:#D85A30;margin-top:8px;border-radius:1px}
+.brand-slogan{font-size:11px;color:#F5C4B3;margin-top:10px;font-style:italic}
+.doc-title{text-align:right}
+.doc-title-main{font-size:16px;font-weight:700;color:#fff}
+.doc-title-sub{font-size:11px;color:#F0997B;margin-top:4px}
+.doc-title-ref{font-size:10px;color:#F5C4B3;margin-top:6px}
+
+/* PROGRESS */
+.progress-bar{height:5px;background:#FAECE7}
+.progress-fill{height:100%;background:#D85A30;transition:width 0.3s;width:0%}
+
+/* INTRO */
+.intro{background:#FAECE7;border-left:4px solid #D85A30;padding:16px 24px}
+.intro p{font-size:12px;color:#712B13;line-height:1.7}
+.intro strong{color:#4A1B0C}
+
+/* CLIENT BLOCK */
+.client-block{padding:20px 28px;border-bottom:1px solid #eee}
+.block-title{font-size:11px;font-weight:700;color:#4A1B0C;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}
+.client-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-group{display:flex;flex-direction:column;gap:4px}
+.field-label{font-size:11px;color:#888}
+.field-line{border:none;border-bottom:1.5px solid #D85A30;padding:5px 2px;font-size:13px;color:#1a1a1a;outline:none;background:transparent;width:100%}
+.field-line::placeholder{color:#ccc}
+
+/* SECTIONS */
+.section{border-bottom:1px solid #eee}
+.section-head{background:#4A1B0C;padding:11px 28px;display:flex;align-items:center;gap:12px}
+.section-num{background:#D85A30;color:#fff;font-size:11px;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.section-title{font-size:13px;font-weight:700;color:#fff}
+.section-body{padding:16px 28px}
+.subsection-title{font-size:11px;font-weight:700;color:#993C1D;text-transform:uppercase;letter-spacing:1px;padding:10px 0 5px;border-bottom:1px solid #FAECE7;margin-bottom:4px}
+
+/* ITEMS */
+.item{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid #f5f5f5}
+.item:last-child{border-bottom:none}
+.cb{width:17px;height:17px;border:2px solid #D85A30;border-radius:3px;flex-shrink:0;cursor:pointer;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
+.cb.checked{background:#D85A30}
+.cb.checked::after{content:'';display:block;width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);margin-bottom:2px}
+.item-text{font-size:13px;color:#1a1a1a;line-height:1.5;flex:1}
+.item-note{font-size:11px;color:#999;margin-top:2px;font-style:italic}
+.inline-input{border:none;border-bottom:1px solid #ddd;width:100%;padding:3px 2px;font-size:12px;color:#1a1a1a;margin-top:6px;outline:none;background:transparent}
+.inline-input::placeholder{color:#ccc}
+.free-text{width:100%;min-height:60px;border:1px solid #e0d0cc;border-radius:6px;padding:8px 10px;font-size:12px;color:#1a1a1a;resize:vertical;margin-top:6px;font-family:Arial,Helvetica,sans-serif;outline:none;line-height:1.6;background:#FFFAF9}
+.free-text:focus{border-color:#D85A30}
+.free-text::placeholder{color:#ccc}
+
+/* HIGHLIGHT BOX */
+.highlight-box{background:#FAECE7;border:1px solid #F5C4B3;border-radius:8px;padding:12px 16px;margin:8px 0}
+.highlight-box-label{font-size:11px;font-weight:700;color:#4A1B0C;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* FREE BLOCKS */
+.free-block{padding:10px 0;border-bottom:1px solid #f5f5f5}
+.free-block:last-child{border-bottom:none}
+.free-block-label{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:3px}
+.free-block-note{font-size:11px;color:#999;margin-bottom:8px;font-style:italic}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);background:#FDF5F3;border-top:1px solid #eee;border-bottom:1px solid #eee}
+.stat{padding:14px;text-align:center;border-right:1px solid #eee}
+.stat:last-child{border-right:none}
+.stat-n{font-size:24px;font-weight:700;color:#D85A30}
+.stat-l{font-size:11px;color:#888;margin-top:2px}
+
+/* SEND BUTTON ZONE */
+.send-zone{padding:24px 28px;background:#fff}
+.send-zone-title{font-size:13px;font-weight:700;color:#4A1B0C;margin-bottom:6px}
+.send-zone-desc{font-size:12px;color:#888;margin-bottom:16px;line-height:1.6}
+.btn-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;font-size:14px;font-weight:700;background:#D85A30;color:#fff;border:none;border-radius:8px;cursor:pointer;letter-spacing:0.3px}
+.btn-send:hover{background:#993C1D}
+.btn-send:active{transform:scale(0.99)}
+.btn-print{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;font-size:13px;font-weight:600;background:transparent;color:#D85A30;border:1.5px solid #D85A30;border-radius:8px;cursor:pointer;margin-top:10px}
+.btn-print:hover{background:#FAECE7}
+
+/* FOOTER */
+.footer{background:#4A1B0C;padding:14px 28px;display:flex;justify-content:space-between;align-items:center}
+.footer-text{font-size:10px;color:#F5C4B3;line-height:1.6}
+
+/* CHECKBOX NATIVE */
+input[type=checkbox]{accent-color:#D85A30;width:14px;height:14px;cursor:pointer}
+label{font-size:12px;color:#1a1a1a;display:flex;align-items:center;gap:7px;cursor:pointer}
+
+@media print{
+  body{background:#fff}
+  .page{box-shadow:none;margin:0;border-radius:0}
+  .btn-send,.btn-print,.send-zone{display:none}
+  .progress-bar{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="brand-name">Nexum<span class="brand-accent"> Advisory</span></div>
+    <div class="brand-sub">Conseil en Prévention</div>
+    <div class="brand-line"></div>
+    <div class="brand-slogan">Votre sécurité, notre priorité.</div>
+  </div>
+  <div class="doc-title">
+    <div class="doc-title-main">Checklist de préparation ARIS</div>
+    <div class="doc-title-sub">Analyse des Risques Intégrale et Systématique</div>
+    <div class="doc-title-ref" id="ref-date"></div>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<!-- INTRO -->
+<div class="intro">
+  <p><strong>Objet de ce document :</strong> Ce questionnaire vous est transmis par votre Conseiller en Prévention <strong>M. Faïçal DAHMANI — Nexum Advisory</strong> afin de préparer votre Analyse des Risques Intégrale et Systématique (ARIS). Veuillez le compléter avant la visite de terrain et cliquer sur le bouton <strong>"Envoyer à Nexum Advisory"</strong> en bas de page. Plus vos informations sont complètes, plus votre rapport ARIS sera précis et adapté à votre réalité.</p>
+</div>
+
+<!-- IDENTIFICATION -->
+<div class="client-block">
+  <div class="block-title">Identification de l'entreprise</div>
+  <div class="client-grid">
+    <div class="field-group"><div class="field-label">Nom de l'entreprise</div><input class="field-line" id="f_nom" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Secteur d'activité</div><input class="field-line" id="f_secteur" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Adresse du site visité</div><input class="field-line" id="f_adresse" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Nombre de travailleurs</div><input class="field-line" id="f_travailleurs" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Personne de contact</div><input class="field-line" id="f_contact" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Fonction</div><input class="field-line" id="f_fonction" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Email</div><input class="field-line" id="f_email" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Téléphone</div><input class="field-line" id="f_tel" placeholder="..."></div>
+  </div>
+  <div class="field-group" style="margin-top:14px"><div class="field-label">Date souhaitée pour la visite de terrain</div><input class="field-line" id="f_date" placeholder="JJ/MM/AAAA"></div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">1</div><div class="section-title">Informations générales sur l'entreprise</div></div>
+  <div class="section-body">
+
+    <div class="subsection-title">Structure et organisation</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_organi')"></div><div class="item-text">L'entreprise dispose-t-elle d'un organigramme ?<input class="inline-input" id="q1_organi" placeholder="Oui / Non / En cours d'élaboration"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_sites')"></div><div class="item-text">Nombre de sites / locaux concernés par l'analyse<input class="inline-input" id="q1_sites" placeholder="Précisez les adresses si plusieurs sites"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_interim')"></div><div class="item-text">Y a-t-il des travailleurs intérimaires, stagiaires ou sous-traitants sur le site ?<input class="inline-input" id="q1_interim" placeholder="Oui / Non — si oui, nombre et missions"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_horaires')"></div><div class="item-text">Y a-t-il des travailleurs en horaires décalés ou de nuit ?<input class="inline-input" id="q1_horaires" placeholder="Oui / Non — précisez si nécessaire"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_maternite')"></div><div class="item-text">Y a-t-il des travailleuses enceintes, allaitantes ou des travailleurs avec restrictions médicales ?<input class="inline-input" id="q1_maternite" placeholder="Oui / Non"></div></div>
+
+    <div class="subsection-title">Locaux et infrastructure</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_locaux')"></div><div class="item-text">Description des locaux (surface, niveaux, zones spécifiques)
+      <textarea class="free-text" id="q1_locaux" placeholder="Ex : bâtiment R+2, sous-sol, entrepôt, zones de production, extérieurs...&#10;Décrivez le plus précisément possible la configuration des lieux."></textarea>
+    </div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_zones')"></div><div class="item-text">Y a-t-il des zones à accès restreint ou à risques spécifiques ?<input class="inline-input" id="q1_zones" placeholder="Ex : chaufferie, zone chimique, salle serveur, toiture..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q1_sociaux')"></div><div class="item-text">Les locaux sociaux (vestiaires, sanitaires, réfectoire) sont-ils conformes ?<input class="inline-input" id="q1_sociaux" placeholder="Oui / Non / À vérifier — précisez"></div></div>
+
+    <div class="free-block">
+      <div class="free-block-label">Remarques générales sur l'entreprise</div>
+      <div class="free-block-note">Contexte utile : historique, changements récents, projets en cours...</div>
+      <textarea class="free-text" id="q1_remarques" style="min-height:72px" placeholder="Écrivez librement..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">2</div><div class="section-title">Description des postes de travail et activités</div></div>
+  <div class="section-body">
+
+    <div class="subsection-title">Fiches de poste et descriptifs de fonction</div>
+    <div class="highlight-box">
+      <div class="highlight-box-label">&#128196; Documents à fournir si disponibles</div>
+      <div class="item" style="padding:6px 0"><div class="cb" onclick="tog(this,'q2_fiches')"></div><div class="item-text">Des fiches de poste ou descriptifs de fonction existent-ils pour les postes à analyser ?<input class="inline-input" id="q2_fiches" placeholder="Oui / Non / Partiellement — joignez-les si possible"></div></div>
+      <div class="item" style="padding:6px 0;border-bottom:none"><div class="cb" onclick="tog(this,'q2_taches')"></div><div class="item-text">Si non, décrivez les principales tâches par poste
+        <textarea class="free-text" id="q2_taches" placeholder="Ex : Poste cuisinier — Préparation des repas, manipulation d'équipements chauds, port de charges...&#10;Poste secrétaire — Travail sur écran, accueil, gestion administrative...&#10;&#10;Détaillez autant de postes que possible."></textarea>
+      </div></div>
+    </div>
+
+    <div class="subsection-title">Caractéristiques des postes</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_ecran')"></div><div class="item-text">Y a-t-il des postes avec travail sur écran ? Lesquels ?<input class="inline-input" id="q2_ecran" placeholder="Postes concernés et nombre d'heures/jour sur écran"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_manut')"></div><div class="item-text">Y a-t-il des postes avec manutention manuelle ou port de charges ?<input class="inline-input" id="q2_manut" placeholder="Oui / Non — postes et charges approximatives (kg)"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_postures')"></div><div class="item-text">Y a-t-il des postes en position debout prolongée, à genoux ou accroupi ?<input class="inline-input" id="q2_postures" placeholder="Précisez les postes concernés"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_repetitif')"></div><div class="item-text">Y a-t-il des postes avec gestes répétitifs ?<input class="inline-input" id="q2_repetitif" placeholder="Nature des gestes et durée estimée"></div></div>
+
+    <div class="subsection-title">Activités et procédés</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_activites')"></div><div class="item-text">Description des principales activités réalisées sur le site
+      <textarea class="free-text" id="q2_activites" placeholder="Ex : production alimentaire, accueil de public, soins aux enfants, nettoyage, logistique, administration...&#10;Décrivez chaque activité principale et sa fréquence."></textarea>
+    </div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_exterieur')"></div><div class="item-text">Y a-t-il des activités en extérieur ou des déplacements professionnels fréquents ?<input class="inline-input" id="q2_exterieur" placeholder="Oui / Non — précisez la nature et la fréquence"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_public')"></div><div class="item-text">Y a-t-il des activités impliquant un contact direct avec le public, des clients ou des usagers ?<input class="inline-input" id="q2_public" placeholder="Oui / Non — situations de tension ou agressivité possibles ?"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q2_saisonnier')"></div><div class="item-text">Y a-t-il des activités saisonnières ou ponctuelles à signaler ?<input class="inline-input" id="q2_saisonnier" placeholder="Précisez la période et la nature de l'activité"></div></div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">3</div><div class="section-title">Analyses de risques existantes</div></div>
+  <div class="section-body">
+
+    <div class="highlight-box">
+      <div class="highlight-box-label">&#128203; Analyses déjà réalisées</div>
+      <div class="item" style="padding:6px 0"><div class="cb" onclick="tog(this,'q3_aris_glob')"></div><div class="item-text">Existe-t-il déjà une analyse de risques globale (ARIS) pour l'entreprise ?<input class="inline-input" id="q3_aris_glob" placeholder="Oui / Non — si oui, date de la dernière version"></div></div>
+      <div class="item" style="padding:6px 0"><div class="cb" onclick="tog(this,'q3_aris_poste')"></div><div class="item-text">Existe-t-il des analyses de risques par poste de travail ?<input class="inline-input" id="q3_aris_poste" placeholder="Oui / Non / Partiellement — précisez les postes couverts"></div></div>
+      <div class="item" style="padding:6px 0">
+        <div class="cb" onclick="tog(this,'q3_analyses_spec')"></div>
+        <div class="item-text">Des analyses complémentaires spécifiques ont-elles été réalisées ?
+          <div style="margin-top:8px;display:flex;flex-direction:column;gap:6px" id="q3_analyses_spec">
+            <label><input type="checkbox" name="spec" value="Biologique"> Analyse des risques biologiques</label>
+            <label><input type="checkbox" name="spec" value="RPS"> Analyse des risques psychosociaux (RPS)</label>
+            <label><input type="checkbox" name="spec" value="Ergonomique"> Analyse ergonomique</label>
+            <label><input type="checkbox" name="spec" value="Chimique"> Analyse des risques chimiques</label>
+            <label><input type="checkbox" name="spec" value="Maternité"> Analyse de la protection de la maternité</label>
+            <label><input type="checkbox" name="spec" value="Incendie"> Analyse des risques incendie (SLCI)</label>
+          </div>
+        </div>
+      </div>
+      <div class="item" style="padding:6px 0;border-bottom:none"><div class="cb" onclick="tog(this,'q3_commentaires')"></div><div class="item-text">Commentaires sur les analyses existantes
+        <textarea class="free-text" id="q3_commentaires" placeholder="Ex : l'ARIS date de 2021 et n'a pas été mise à jour depuis le déménagement. L'analyse ergonomique a été réalisée uniquement pour le poste de bureau..."></textarea>
+      </div></div>
+    </div>
+
+    <div class="subsection-title">Suites données aux analyses précédentes</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q3_pgp')"></div><div class="item-text">Un Plan Global de Prévention (PGP) est-il en place ?<div class="item-note">Document stratégique 5 ans — art. I.2-8</div><input class="inline-input" id="q3_pgp" placeholder="Oui / Non — si oui, année de début et de fin"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q3_paa')"></div><div class="item-text">Un Plan d'Action Annuel (PAA) est-il établi pour l'année en cours ?<div class="item-note">art. I.2-9 — à transmettre avant le 1er novembre</div><input class="inline-input" id="q3_paa" placeholder="Oui / Non — taux d'avancement si possible"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q3_actions')"></div><div class="item-text">Les actions issues des analyses précédentes ont-elles été mises en œuvre ?
+      <textarea class="free-text" id="q3_actions" placeholder="Décrivez les actions réalisées et celles encore en attente..."></textarea>
+    </div></div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">4</div><div class="section-title">Dangers déjà identifiés par l'entreprise</div></div>
+  <div class="section-body">
+    <p style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6">Cochez les dangers que vous avez déjà identifiés et ajoutez tout commentaire utile dans les champs libres.</p>
+
+    <div class="subsection-title">Risques physiques et sécurité</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_chute_plain')"></div><div class="item-text">Chutes de plain-pied (sols glissants, encombrés, dénivellation)<input class="inline-input" id="q4_chute_plain" placeholder="Zones et situations concernées..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_chute_haut')"></div><div class="item-text">Chutes de hauteur (escaliers, passerelles, toiture)<input class="inline-input" id="q4_chute_haut" placeholder="Zones concernées..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_incendie')"></div><div class="item-text">Risque incendie / explosion<input class="inline-input" id="q4_incendie" placeholder="Nature du risque, zones concernées..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_electrique')"></div><div class="item-text">Risque électrique<input class="inline-input" id="q4_electrique" placeholder="Équipements ou installations concernés..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_bruit')"></div><div class="item-text">Bruit excessif<input class="inline-input" id="q4_bruit" placeholder="Zones ou activités concernées, niveau estimé..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_temp')"></div><div class="item-text">Températures extrêmes (chaleur, froid)<input class="inline-input" id="q4_temp" placeholder="Zones concernées, températures estimées..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_coupures')"></div><div class="item-text">Coupures, écrasements, coincements (machines, outils tranchants)<input class="inline-input" id="q4_coupures" placeholder="Équipements concernés..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_autres_phys')"></div><div class="item-text">Autres risques physiques
+      <textarea class="free-text" id="q4_autres_phys" style="min-height:48px" placeholder="Décrivez librement tout autre risque physique..."></textarea>
+    </div></div>
+
+    <div class="subsection-title">Risques chimiques et biologiques</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_chimiques')"></div><div class="item-text">Utilisation de produits chimiques (nettoyage, production, entretien...)
+      <textarea class="free-text" id="q4_chimiques" style="min-height:52px" placeholder="Listez les produits utilisés, leur fréquence d'utilisation et les postes exposés. Joignez les FDS si disponibles."></textarea>
+    </div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_biologiques')"></div><div class="item-text">Exposition à des agents biologiques (fluides corporels, déchets, micro-organismes...)
+      <textarea class="free-text" id="q4_biologiques" style="min-height:52px" placeholder="Décrivez la nature de l'exposition, les postes concernés et la fréquence..."></textarea>
+    </div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_poussières')"></div><div class="item-text">Exposition à des poussières, fumées ou vapeurs<input class="inline-input" id="q4_poussières" placeholder="Nature et source des émissions, postes exposés..."></div></div>
+
+    <div class="subsection-title">Risques ergonomiques</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_tms')"></div><div class="item-text">Troubles musculo-squelettiques (TMS) — douleurs dos, épaules, poignets, genoux
+      <textarea class="free-text" id="q4_tms" style="min-height:52px" placeholder="Postes ou activités concernés, plaintes déjà signalées, zones du corps touchées..."></textarea>
+    </div></div>
+
+    <div class="subsection-title">Risques psychosociaux</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_stress')"></div><div class="item-text">Stress, surcharge de travail, pression des délais<input class="inline-input" id="q4_stress" placeholder="Postes ou situations concernés..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_agressivite')"></div><div class="item-text">Conflits, agressivité (interne ou provenant de tiers / public)<input class="inline-input" id="q4_agressivite" placeholder="Fréquence, nature des situations..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_isole')"></div><div class="item-text">Travail isolé ou situations de détresse sans recours possible<input class="inline-input" id="q4_isole" placeholder="Postes concernés..."></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q4_rps_libre')"></div><div class="item-text">Commentaires libres sur les risques psychosociaux
+      <textarea class="free-text" id="q4_rps_libre" style="min-height:60px" placeholder="Ambiance de travail, turnover, absentéisme, signalements récents..."></textarea>
+    </div></div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">5</div><div class="section-title">Mesures de prévention en place</div></div>
+  <div class="section-body">
+
+    <div class="subsection-title">Équipements de protection</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_epi')"></div><div class="item-text">Des EPI (équipements de protection individuelle) sont-ils mis à disposition ?
+      <textarea class="free-text" id="q5_epi" style="min-height:52px" placeholder="Listez les EPI disponibles par poste : gants, casques, chaussures de sécurité, masques, lunettes...&#10;Précisez si leur port est effectif ou non."></textarea>
+    </div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_collectives')"></div><div class="item-text">Des protections collectives sont-elles en place ?
+      <textarea class="free-text" id="q5_collectives" style="min-height:52px" placeholder="Ex : garde-corps, aspiration, éclairage de sécurité, signalisation au sol, écrans de protection..."></textarea>
+    </div></div>
+
+    <div class="subsection-title">Organisation et procédures</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_piu')"></div><div class="item-text">Un plan d'urgence interne (PIU) ou procédure d'évacuation est-il en place et affiché ?<input class="inline-input" id="q5_piu" placeholder="Oui / Non — date de dernière mise à jour"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_exercice')"></div><div class="item-text">Un exercice d'évacuation a-t-il été organisé récemment ?<input class="inline-input" id="q5_exercice" placeholder="Date du dernier exercice et nombre de participants"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_livret')"></div><div class="item-text">Un livret d'accueil pour les nouveaux travailleurs existe-t-il ?<input class="inline-input" id="q5_livret" placeholder="Oui / Non — précisez son contenu si possible"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_registre')"></div><div class="item-text">Un registre des premiers soins est-il tenu ? Les trousses de secours sont-elles contrôlées ?<input class="inline-input" id="q5_registre" placeholder="Oui / Non — emplacement des trousses, date du dernier contrôle"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_org_libre')"></div><div class="item-text">Commentaires libres sur l'organisation de la prévention
+      <textarea class="free-text" id="q5_org_libre" style="min-height:60px" placeholder="Tout élément utile sur la façon dont la prévention est organisée dans l'entreprise..."></textarea>
+    </div></div>
+
+    <div class="subsection-title">Formations sécurité</div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_secours')"></div><div class="item-text">Les travailleurs ont-ils reçu une formation premiers secours ?<input class="inline-input" id="q5_secours" placeholder="Oui / Non — date et nombre de personnes formées"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_gestes')"></div><div class="item-text">Une formation gestes et postures a-t-elle été dispensée ?<input class="inline-input" id="q5_gestes" placeholder="Oui / Non — date"></div></div>
+    <div class="item"><div class="cb" onclick="tog(this,'q5_autres_form')"></div><div class="item-text">D'autres formations sécurité ont-elles été organisées ?
+      <textarea class="free-text" id="q5_autres_form" style="min-height:52px" placeholder="Ex : formation incendie, gestion de l'agressivité, risques chimiques...&#10;Précisez les formations, dates et personnes concernées."></textarea>
+    </div></div>
+  </div>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section">
+  <div class="section-head"><div class="section-num">6</div><div class="section-title">Documents disponibles à fournir</div></div>
+  <div class="section-body">
+    <p style="font-size:12px;color:#888;margin-bottom:12px;line-height:1.6">Cochez les documents dont vous disposez et joignez-les à votre email. Ces éléments permettront d'enrichir votre rapport ARIS.</p>
+
+    <div class="subsection-title">Contrôles réglementaires</div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Rapport de contrôle électrique SECT (basse tension)<div class="item-note">Obligatoire tous les 5 ans</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Rapport de contrôle extincteurs et éclairages de secours<div class="item-note">Contrôle annuel obligatoire</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Rapport de contrôle des équipements de levage (si applicable)</div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Fiches de données de sécurité (FDS) des produits chimiques<div class="item-note">Une FDS par produit utilisé</div></div></div>
+
+    <div class="subsection-title">Documents de gestion de la prévention</div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Analyse de risques globale (ARIS) existante<div class="item-note">Joindre la dernière version disponible</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Analyses de risques par poste existantes<div class="item-note">Joindre pour chaque poste concerné</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Fiches de poste ou descriptifs de fonction<div class="item-note">Pour les postes à analyser</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Plan Global de Prévention (PGP) existant<div class="item-note">art. I.2-8</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Plan d'Action Annuel (PAA) de l'année en cours<div class="item-note">art. I.2-9</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Registre des accidents de travail et incidents<div class="item-note">3 dernières années si possible</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Registre de faits de tiers (agressions, incivilités)<div class="item-note">art. I.3-7</div></div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Contrats de maintenance des équipements</div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Attestations de formations sécurité du personnel</div></div>
+    <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">Résultats de la dernière surveillance de santé (médecin du travail)<div class="item-note">art. I.4-5</div></div></div>
+
+    <div class="subsection-title">Informations complémentaires</div>
+    <div class="free-block">
+      <div class="free-block-label">Points particuliers à aborder lors de la visite</div>
+      <div class="free-block-note">Préoccupations spécifiques, priorités, situations récentes à signaler...</div>
+      <textarea class="free-text" id="q6_points" style="min-height:72px" placeholder="Écrivez librement. Ex : nous avons eu un accident léger en mars, un nouveau poste a été créé..."></textarea>
+    </div>
+    <div class="free-block">
+      <div class="free-block-label">Accidents ou incidents récents à signaler</div>
+      <div class="free-block-note">Date, nature, circonstances, mesures prises</div>
+      <textarea class="free-text" id="q6_accidents" style="min-height:60px" placeholder="Décrivez les accidents ou incidents survenus au cours des 12 derniers mois..."></textarea>
+    </div>
+    <div class="free-block" style="border-bottom:none">
+      <div class="free-block-label">Commentaires généraux</div>
+      <textarea class="free-text" id="q6_commentaires" style="min-height:60px" placeholder="Tout autre élément que vous souhaitez porter à la connaissance du Conseiller en Prévention avant la visite..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="cnt-c">0</div><div class="stat-l">points cochés</div></div>
+  <div class="stat"><div class="stat-n" id="cnt-p">0%</div><div class="stat-l">complété</div></div>
+  <div class="stat"><div class="stat-n" id="cnt-r">0</div><div class="stat-l">points restants</div></div>
+</div>
+
+<!-- SEND ZONE -->
+<div class="send-zone">
+  <div class="send-zone-title">&#128231; Envoyer la checklist complétée à Nexum Advisory</div>
+  <div class="send-zone-desc">Cliquez sur le bouton ci-dessous. Votre application email (Outlook, Gmail...) s'ouvrira automatiquement avec toutes vos réponses dans le corps du message et l'adresse de M. Dahmani déjà renseignée. Il ne vous reste plus qu'à cliquer <strong>Envoyer</strong>.</div>
+  <button class="btn-send" onclick="sendEmail()">
+    &#128231;&nbsp; Envoyer à Nexum Advisory — fayssal.dahmani@gmail.com
+  </button>
+  <button class="btn-print" onclick="window.print()">
+    &#128424;&nbsp; Imprimer la checklist
+  </button>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div>
+    <div class="footer-text">Nexum Advisory — M. Faïçal DAHMANI, Conseiller en Prévention</div>
+    <div class="footer-text">fayssal.dahmani@gmail.com &nbsp;|&nbsp; Document confidentiel</div>
+  </div>
+  <div class="footer-text" id="footer-date"></div>
+</div>
+
+</div><!-- end .page -->
+
+<script>
+// Date
+const now = new Date();
+const dateStr = now.toLocaleDateString('fr-BE',{day:'2-digit',month:'long',year:'numeric'});
+document.getElementById('ref-date').textContent = 'Préparé le ' + dateStr;
+document.getElementById('footer-date').textContent = dateStr;
+
+// Toggle checkbox
+function tog(el, id) {
+  el.classList.toggle('checked');
+  upd();
+}
+
+// Update stats
+function upd() {
+  const all = document.querySelectorAll('.cb').length;
+  const done = document.querySelectorAll('.cb.checked').length;
+  const pct = Math.round(done/all*100);
+  document.getElementById('cnt-c').textContent = done;
+  document.getElementById('cnt-p').textContent = pct + '%';
+  document.getElementById('cnt-r').textContent = all - done;
+  document.getElementById('prog').style.width = pct + '%';
+}
+upd();
+
+// Collect all responses and open email client
+function sendEmail() {
+  function val(id) {
+    const el = document.getElementById(id);
+    if (!el) return '';
+    return (el.value || el.textContent || '').trim();
+  }
+
+  // Collect checkboxes for specific analyses
+  const specs = [];
+  document.querySelectorAll('input[name="spec"]:checked').forEach(cb => specs.push(cb.value));
+
+  // Count checked items
+  const all = document.querySelectorAll('.cb').length;
+  const done = document.querySelectorAll('.cb.checked').length;
+
+  const subject = encodeURIComponent('Checklist ARIS — ' + (val('f_nom') || 'Entreprise') + ' — ' + dateStr);
+
+  let body = '';
+  body += '=== CHECKLIST DE PREPARATION ARIS ===\n';
+  body += 'Nexum Advisory — M. Faical DAHMANI\n';
+  body += 'Date : ' + dateStr + '\n';
+  body += 'Avancement : ' + done + '/' + all + ' points coches (' + Math.round(done/all*100) + '%)\n';
+  body += '\n';
+
+  body += '--- IDENTIFICATION DE L\'ENTREPRISE ---\n';
+  body += 'Entreprise : ' + val('f_nom') + '\n';
+  body += 'Secteur : ' + val('f_secteur') + '\n';
+  body += 'Adresse : ' + val('f_adresse') + '\n';
+  body += 'Nombre de travailleurs : ' + val('f_travailleurs') + '\n';
+  body += 'Contact : ' + val('f_contact') + ' (' + val('f_fonction') + ')\n';
+  body += 'Email : ' + val('f_email') + '\n';
+  body += 'Tel : ' + val('f_tel') + '\n';
+  body += 'Date souhaitee visite : ' + val('f_date') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 1 : INFORMATIONS GENERALES ---\n';
+  body += 'Organigramme : ' + val('q1_organi') + '\n';
+  body += 'Sites / locaux : ' + val('q1_sites') + '\n';
+  body += 'Interimaires / stagiaires : ' + val('q1_interim') + '\n';
+  body += 'Horaires decales : ' + val('q1_horaires') + '\n';
+  body += 'Maternite / restrictions : ' + val('q1_maternite') + '\n';
+  body += 'Description locaux : ' + val('q1_locaux') + '\n';
+  body += 'Zones restreintes : ' + val('q1_zones') + '\n';
+  body += 'Locaux sociaux conformes : ' + val('q1_sociaux') + '\n';
+  body += 'Remarques generales : ' + val('q1_remarques') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 2 : POSTES DE TRAVAIL ET ACTIVITES ---\n';
+  body += 'Fiches de poste disponibles : ' + val('q2_fiches') + '\n';
+  body += 'Description des taches par poste : ' + val('q2_taches') + '\n';
+  body += 'Postes ecran : ' + val('q2_ecran') + '\n';
+  body += 'Manutention / port de charges : ' + val('q2_manut') + '\n';
+  body += 'Postures contraignantes : ' + val('q2_postures') + '\n';
+  body += 'Gestes repetitifs : ' + val('q2_repetitif') + '\n';
+  body += 'Activites principales : ' + val('q2_activites') + '\n';
+  body += 'Activites exterieures : ' + val('q2_exterieur') + '\n';
+  body += 'Contact avec public : ' + val('q2_public') + '\n';
+  body += 'Activites saisonnieres : ' + val('q2_saisonnier') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 3 : ANALYSES DE RISQUES EXISTANTES ---\n';
+  body += 'ARIS globale existante : ' + val('q3_aris_glob') + '\n';
+  body += 'Analyses par poste : ' + val('q3_aris_poste') + '\n';
+  body += 'Analyses specifiques realisees : ' + (specs.length ? specs.join(', ') : 'Aucune') + '\n';
+  body += 'Commentaires analyses existantes : ' + val('q3_commentaires') + '\n';
+  body += 'PGP en place : ' + val('q3_pgp') + '\n';
+  body += 'PAA en place : ' + val('q3_paa') + '\n';
+  body += 'Suites donnees aux analyses : ' + val('q3_actions') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 4 : DANGERS IDENTIFIES ---\n';
+  body += 'Chutes de plain-pied : ' + val('q4_chute_plain') + '\n';
+  body += 'Chutes de hauteur : ' + val('q4_chute_haut') + '\n';
+  body += 'Incendie / explosion : ' + val('q4_incendie') + '\n';
+  body += 'Risque electrique : ' + val('q4_electrique') + '\n';
+  body += 'Bruit : ' + val('q4_bruit') + '\n';
+  body += 'Temperatures extremes : ' + val('q4_temp') + '\n';
+  body += 'Coupures / ecrasements : ' + val('q4_coupures') + '\n';
+  body += 'Autres risques physiques : ' + val('q4_autres_phys') + '\n';
+  body += 'Produits chimiques : ' + val('q4_chimiques') + '\n';
+  body += 'Agents biologiques : ' + val('q4_biologiques') + '\n';
+  body += 'Poussieres / fumees : ' + val('q4_poussières') + '\n';
+  body += 'TMS : ' + val('q4_tms') + '\n';
+  body += 'Stress / surcharge : ' + val('q4_stress') + '\n';
+  body += 'Agressivite / conflits : ' + val('q4_agressivite') + '\n';
+  body += 'Travail isole : ' + val('q4_isole') + '\n';
+  body += 'Commentaires RPS : ' + val('q4_rps_libre') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 5 : MESURES EN PLACE ---\n';
+  body += 'EPI disponibles : ' + val('q5_epi') + '\n';
+  body += 'Protections collectives : ' + val('q5_collectives') + '\n';
+  body += 'Plan d\'urgence (PIU) : ' + val('q5_piu') + '\n';
+  body += 'Exercice evacuation : ' + val('q5_exercice') + '\n';
+  body += 'Livret d\'accueil : ' + val('q5_livret') + '\n';
+  body += 'Registre premiers soins : ' + val('q5_registre') + '\n';
+  body += 'Organisation prevention : ' + val('q5_org_libre') + '\n';
+  body += 'Formation premiers secours : ' + val('q5_secours') + '\n';
+  body += 'Formation gestes et postures : ' + val('q5_gestes') + '\n';
+  body += 'Autres formations : ' + val('q5_autres_form') + '\n';
+  body += '\n';
+
+  body += '--- SECTION 6 : POINTS COMPLEMENTAIRES ---\n';
+  body += 'Points a aborder lors de la visite : ' + val('q6_points') + '\n';
+  body += 'Accidents / incidents recents : ' + val('q6_accidents') + '\n';
+  body += 'Commentaires generaux : ' + val('q6_commentaires') + '\n';
+  body += '\n';
+  body += '---\n';
+  body += 'Document envoye via la checklist ARIS — Nexum Advisory\n';
+
+  const mailto = 'mailto:fayssal.dahmani@gmail.com'
+    + '?subject=' + subject
+    + '&body=' + encodeURIComponent(body);
+
+  window.location.href = mailto;
+}
+</script>
+</body>
+</html>
