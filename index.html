@@ -97,10 +97,10 @@ body{font-family:Arial,Helvetica,sans-serif;background:#F5F0EE;color:#1a1a1a;fon
 .recap-line{font-size:12px;color:#1a1a1a;padding:4px 0;border-bottom:1px solid #F5C4B3;display:flex;gap:8px}
 .recap-line:last-child{border-bottom:none}
 .recap-key{font-weight:700;color:#993C1D;min-width:140px;flex-shrink:0}
-.btn-send{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;font-size:14px;font-weight:700;background:#D85A30;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-bottom:10px}
-.btn-send:hover{background:#993C1D}
-.btn-print-final{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;font-size:13px;color:#D85A30;background:transparent;border:1.5px solid #D85A30;border-radius:8px;cursor:pointer}
-.btn-print-final:hover{background:#FAECE7}
+.btn-pdf{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;font-size:13px;color:#D85A30;background:transparent;border:1.5px solid #D85A30;border-radius:8px;cursor:pointer;margin-bottom:16px}
+.btn-pdf:hover{background:#FAECE7}
+.send-error{font-size:12px;color:#e53e3e;background:#fff5f5;border:1px solid #fed7d7;border-radius:6px;padding:10px 14px;margin-top:10px;display:none}
+.send-error.show{display:block}
 
 /* FOOTER */
 .footer{background:#4A1B0C;padding:12px 28px;display:flex;justify-content:space-between;align-items:center}
@@ -196,15 +196,15 @@ label.chk{font-size:12px;color:#1a1a1a;display:flex;align-items:center;gap:7px;c
     <div class="field-group"><div class="field-label">Nom de l'entreprise *</div><input class="field-line" id="f_nom" placeholder="..."><div class="error-msg" id="err_nom">Ce champ est requis.</div></div>
     <div class="field-group"><div class="field-label">Secteur d'activité</div><input class="field-line" id="f_secteur" placeholder="..."></div>
     <div class="field-group"><div class="field-label">Adresse du site visité</div><input class="field-line" id="f_adresse" placeholder="..."></div>
-    <div class="field-group"><div class="field-label">Nombre de travailleurs</div><input class="field-line" id="f_travailleurs" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Nombre de travailleurs</div><input class="field-line" id="f_travailleurs" type="number" min="0" placeholder="..."></div>
     <div class="field-group"><div class="field-label">Personne de contact *</div><input class="field-line" id="f_contact" placeholder="..."><div class="error-msg" id="err_contact">Ce champ est requis.</div></div>
     <div class="field-group"><div class="field-label">Fonction</div><input class="field-line" id="f_fonction" placeholder="..."></div>
-    <div class="field-group"><div class="field-label">Email *</div><input class="field-line" id="f_email" placeholder="..."><div class="error-msg" id="err_email">Ce champ est requis.</div></div>
-    <div class="field-group"><div class="field-label">Téléphone</div><input class="field-line" id="f_tel" placeholder="..."></div>
+    <div class="field-group"><div class="field-label">Email *</div><input class="field-line" id="f_email" type="email" placeholder="..."><div class="error-msg" id="err_email">Ce champ est requis.</div></div>
+    <div class="field-group"><div class="field-label">Téléphone</div><input class="field-line" id="f_tel" type="tel" placeholder="..."></div>
     <div class="field-group"><div class="field-label">Médecin du travail</div><input class="field-line" id="f_medecin" placeholder="Nom et coordonnées"></div>
     <div class="field-group"><div class="field-label">Service de santé au travail</div><input class="field-line" id="f_sst" placeholder="Ex : my CESI, Cohézio..."></div>
   </div>
-  <div class="field-group"><div class="field-label">Date souhaitée pour la visite de terrain</div><input class="field-line" id="f_date" placeholder="JJ/MM/AAAA"></div>
+  <div class="field-group"><div class="field-label">Date souhaitée pour la visite de terrain</div><input class="field-line" id="f_date" type="date"></div>
   <div class="subsection-title" style="margin-top:18px">Structure et organisation</div>
   <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">L'entreprise dispose-t-elle d'un organigramme ?<input class="inline-input" id="q1_organi" placeholder="Oui / Non / En cours"></div></div>
   <div class="item"><div class="cb" onclick="tog(this)"></div><div class="item-text">L'entreprise dispose-t-elle d'un Conseiller en Prévention interne ?<input class="inline-input" id="q1_cp_interne" placeholder="Oui / Non — si oui, nom, niveau et coordonnées"></div></div>
@@ -351,9 +351,11 @@ label.chk{font-size:12px;color:#1a1a1a;display:flex;align-items:center;gap:7px;c
   <div class="section-title">Récapitulatif et envoi</div>
   <div class="section-desc">Vérifiez vos informations principales avant d'envoyer la checklist à Nexum Advisory.</div>
   <div class="recap-box" id="recap-box"></div>
+  <button class="btn-pdf" onclick="generatePDF()">⬇ Télécharger en PDF</button>
   <div style="font-size:12px;color:#888;margin-bottom:16px;line-height:1.6">
     Vérifiez vos informations principales ci-dessous. Cliquez sur <strong>"✓ Terminer &amp; Envoyer"</strong> pour transmettre votre checklist à votre Conseiller en Prévention.
   </div>
+  <div class="send-error" id="send-error">⚠ L'envoi a échoué. Vérifiez votre connexion ou contactez directement votre Conseiller en Prévention.</div>
 </div>
 
 <!-- PAGE CONFIRMATION -->
@@ -408,7 +410,7 @@ function setType(type) {
 }
 
 // Checkbox toggle
-function tog(el){ el.classList.toggle('checked'); }
+function tog(el){ el.classList.toggle('checked'); el.setAttribute('aria-checked', el.classList.contains('checked')); }
 
 // Navigation
 function updateNav() {
@@ -444,12 +446,22 @@ function validate(step) {
   }
   if(step === 1) {
     let ok = true;
-    [['f_nom','err_nom'],['f_contact','err_contact'],['f_email','err_email']].forEach(([id,eid]) => {
+    [['f_nom','err_nom'],['f_contact','err_contact']].forEach(([id,eid]) => {
       const el = document.getElementById(id);
       const err = document.getElementById(eid);
       if(!el.value.trim()){ el.classList.add('field-error'); err.classList.add('show'); ok=false; }
       else{ el.classList.remove('field-error'); err.classList.remove('show'); }
     });
+    const emailEl = document.getElementById('f_email');
+    const emailErr = document.getElementById('err_email');
+    const emailVal = emailEl.value.trim();
+    if(!emailVal){
+      emailEl.classList.add('field-error'); emailErr.textContent='Ce champ est requis.'; emailErr.classList.add('show'); ok=false;
+    } else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+      emailEl.classList.add('field-error'); emailErr.textContent='Adresse email invalide.'; emailErr.classList.add('show'); ok=false;
+    } else {
+      emailEl.classList.remove('field-error'); emailErr.classList.remove('show');
+    }
     return ok;
   }
   return true;
@@ -480,10 +492,12 @@ function prevStep() {
   }
 }
 
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function val(id){
   const el=document.getElementById(id);
   if(!el) return '';
-  return (el.value||el.textContent||'').trim();
+  return (el.value||'').trim();
 }
 
 function buildRecap(){
@@ -501,7 +515,7 @@ function buildRecap(){
   ];
   const box=document.getElementById('recap-box');
   box.innerHTML='<div class="recap-title">📋 Résumé de votre checklist</div>'+
-    lines.map(([k,v])=>`<div class="recap-line"><span class="recap-key">${k}</span><span>${v||'—'}</span></div>`).join('');
+    lines.map(([k,v])=>`<div class="recap-line"><span class="recap-key">${esc(k)}</span><span>${esc(v)||'—'}</span></div>`).join('');
 }
 
 function generatePDF(){
@@ -516,7 +530,7 @@ function generatePDF(){
   const now2 = new Date();
   const dateStr2 = now2.toLocaleDateString("fr-BE",{day:"2-digit",month:"long",year:"numeric"});
 
-  function hdr(pg){
+  function hdr(){
     doc.setFillColor(...BD); doc.rect(0,0,PW,22,'F');
     doc.setFillColor(...OR); doc.rect(0,22,PW,1,'F');
     doc.setTextColor(255,255,255);
@@ -533,22 +547,23 @@ function generatePDF(){
   function sectionTitle(y, num, title){
     doc.setFillColor(...BD); doc.rect(ML,y,IW,8,'F');
     doc.setTextColor(255,255,255); doc.setFont("helvetica","bold"); doc.setFontSize(11);
-    doc.text(num+".  "+title, ML+3, y+5.5);
+    doc.text((num ? num+".  " : "")+title, ML+3, y+5.5);
     doc.setTextColor(0,0,0);
     return y+10;
   }
 
   function row(y, label, value, shade){
     if(y > PH-25){ doc.addPage(); hdr(); y=28; }
-    if(shade){ doc.setFillColor(250,236,231); doc.rect(ML,y,IW,7,'F'); }
+    const lines = doc.splitTextToSize(value||"—", IW-52);
+    const rowH = Math.max(7, lines.length*5);
+    if(shade){ doc.setFillColor(250,236,231); doc.rect(ML,y,IW,rowH,'F'); }
     doc.setFont("helvetica","bold"); doc.setFontSize(8.5); doc.setTextColor(...OR);
     doc.text(label, ML+2, y+4.8);
     doc.setFont("helvetica","normal"); doc.setTextColor(30,30,30);
-    const lines = doc.splitTextToSize(value||"—", IW-52);
     doc.text(lines, ML+52, y+4.8);
     doc.setDrawColor(230,210,205); doc.setLineWidth(0.3);
-    doc.line(ML, y+7, ML+IW, y+7);
-    return y + Math.max(7, lines.length*5);
+    doc.line(ML, y+rowH, ML+IW, y+rowH);
+    return y + rowH;
   }
 
   function freeRow(y, label, value){
@@ -691,22 +706,35 @@ function generatePDF(){
 }
 
 function sendAndConfirm(){
-  // 1. Afficher d'abord la page de confirmation
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('page-confirm').style.display='block';
-  document.querySelector('.nav').style.display='none';
-  document.getElementById('prog').style.width='100%';
-  for(let i=0;i<totalSteps;i++){
-    document.getElementById('sn'+i).className='step-num done';
-    document.getElementById('sl'+i).className='step-label done';
-  }
-  const nom = val('f_nom')||'—';
-  const typeLabel = typeAnalyse==='globale'?'ARIS Globale':typeAnalyse==='poste'?'ARIS par Poste — '+val('f_postes'):'Non précisé';
-  document.getElementById('confirm-recap').innerHTML =
-    'Entreprise : <strong>'+nom+'</strong><br>Type : <strong>'+typeLabel+'</strong><br>Contact : <strong>'+val('f_contact')+'</strong> — '+val('f_email');
-  window.scrollTo({top:0,behavior:'smooth'});
-  // 2. Ouvrir le mailto après un délai pour que la page s'affiche d'abord
-  setTimeout(function(){ sendEmail(); }, 800);
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+  document.getElementById('send-error').classList.remove('show');
+  sendEmail().then(function(){
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    document.querySelector('.stepper').style.display='none';
+    document.querySelector('.prog-bar').style.display='none';
+    document.getElementById('page-confirm').style.display='block';
+    document.querySelector('.nav').style.display='none';
+    document.getElementById('prog').style.width='100%';
+    for(let i=0;i<totalSteps;i++){
+      document.getElementById('sn'+i).className='step-num done';
+      document.getElementById('sl'+i).className='step-label done';
+    }
+    const typeLabel = typeAnalyse==='globale'?'ARIS Globale':typeAnalyse==='poste'?'ARIS par Poste — '+val('f_postes'):'Non précisé';
+    const confirmRecap = document.getElementById('confirm-recap');
+    confirmRecap.innerHTML = '';
+    [['Entreprise', val('f_nom')||'—'],['Type', typeLabel],['Contact', val('f_contact')+' — '+val('f_email')]].forEach(function([label, value], i){
+      if(i) confirmRecap.appendChild(document.createElement('br'));
+      confirmRecap.appendChild(document.createTextNode(label+' : '));
+      var b = document.createElement('strong'); b.textContent = value; confirmRecap.appendChild(b);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+  }).catch(function(){
+    btn.disabled = false;
+    btn.textContent = '✓ Terminer & Envoyer';
+    document.getElementById('send-error').classList.add('show');
+  });
 }
 
 function sendEmail(){
@@ -789,19 +817,39 @@ function sendEmail(){
     "Commentaires_generaux":val("q6_commentaires"),
   };
 
-  // Envoi via Formspree
-  fetch("https://formspree.io/f/mjgllodn", {
+  return fetch("https://formspree.io/f/mjgllodn", {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
     body: JSON.stringify(data)
   })
   .then(function(response){
-    if(!response.ok) console.error("Erreur Formspree:", response.status);
-  })
-  .catch(function(err){ console.error("Erreur réseau:", err); });
+    if(!response.ok) throw new Error("Erreur Formspree: "+response.status);
+  });
 }
 
 updateNav();
+
+// Accessibility: ARIA + keyboard for custom checkboxes
+document.querySelectorAll('.cb').forEach(function(cb){
+  cb.setAttribute('tabindex','0');
+  cb.setAttribute('role','checkbox');
+  cb.setAttribute('aria-checked','false');
+});
+document.addEventListener('keydown',function(e){
+  if((e.key===' '||e.key==='Enter')&&e.target.classList.contains('cb')){
+    e.preventDefault();
+    tog(e.target);
+  }
+});
+
+// Accessibility: aria-labels for inline inputs using parent question text
+document.querySelectorAll('.item-text').forEach(function(itemText){
+  var label = (itemText.firstChild&&itemText.firstChild.textContent||'').trim();
+  if(!label) return;
+  itemText.querySelectorAll('input.inline-input,textarea.free-text').forEach(function(inp){
+    if(!inp.getAttribute('aria-label')) inp.setAttribute('aria-label', label);
+  });
+});
 </script>
 </body>
 </html>
