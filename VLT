@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VLT – CESI SEPP</title>
+<style>
+  :root {
+    --bleu: #1B4F8A;
+    --bleu-clair: #E6F1FB;
+    --bleu-bord: #B5D4F4;
+    --gris-fond: #F4F3F0;
+    --gris-bord: #D3D1C7;
+    --rouge: #A32D2D;
+    --rouge-fond: #FCEBEB;
+    --rouge-bord: #F7C1C1;
+    --orange: #854F0B;
+    --orange-fond: #FAEEDA;
+    --orange-bord: #FAC775;
+    --vert: #3B6D11;
+    --vert-fond: #EAF3DE;
+    --vert-bord: #C0DD97;
+    --verif: #185FA5;
+    --texte: #2C2C2A;
+    --texte-sec: #5F5E5A;
+    --radius: 10px;
+    --touch: 48px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { font-size: 16px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 15px; color: var(--texte); background: var(--gris-fond); }
+
+  /* HEADER */
+  .header { background: var(--bleu); color: white; padding: 16px 16px 14px; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .cesi-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
+  .header h1 { font-size: 13px; font-weight: 600; opacity: 0.9; margin-top: 2px; line-height: 1.3; }
+  .header-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .h-field label { display: block; font-size: 10px; opacity: 0.7; margin-bottom: 2px; }
+  .h-field input { width: 100%; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; color: white; font-size: 14px; padding: 7px 10px; outline: none; }
+  .h-field input::placeholder { color: rgba(255,255,255,0.45); font-size: 13px; }
+  .h-field input:focus { background: rgba(255,255,255,0.20); border-color: rgba(255,255,255,0.6); }
+
+  /* TOOLBAR MOBILE */
+  .toolbar { background: white; border-bottom: 1px solid var(--gris-bord); padding: 10px 12px; display: flex; gap: 8px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; position: sticky; top: 0; z-index: 100; }
+  .toolbar::-webkit-scrollbar { display: none; }
+  #save-status { font-size: 12px; color: var(--vert); opacity: 0.5; transition: opacity 0.4s; flex-shrink: 0; white-space: nowrap; }
+  .tbtn { border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 5px; min-height: var(--touch); }
+  .tbtn-green { background: #2E7D32; color: white; }
+  .tbtn-blue  { background: var(--bleu); color: white; }
+  .tbtn-dark  { background: #444; color: white; }
+  .tbtn-grey  { background: #bbb; color: white; }
+
+  /* SECTION */
+  .section { background: white; margin: 10px 10px 0; border-radius: var(--radius); overflow: hidden; }
+  .section:last-of-type { margin-bottom: 10px; }
+  .sec-header { background: var(--bleu); color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+  .sec-body { padding: 12px 14px; }
+
+  /* INFOS GRID */
+  .info-rows { display: flex; flex-direction: column; gap: 0; }
+  .info-row { display: flex; flex-direction: column; border-bottom: 1px solid var(--gris-bord); padding: 8px 0; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row label { font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .info-row input { border: none; outline: none; font-size: 14px; color: var(--texte); background: transparent; width: 100%; padding: 2px 0; }
+  .info-row input:focus { background: var(--bleu-clair); border-radius: 4px; padding: 2px 6px; }
+
+  /* LÉGENDE */
+  .legende { display: flex; flex-direction: column; gap: 6px; }
+  .badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+  .badge-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .badge-urgent   { background: var(--rouge-fond);  color: var(--rouge); }
+  .badge-moyen    { background: var(--orange-fond); color: var(--orange); }
+  .badge-verif    { background: var(--bleu-clair);  color: var(--verif); }
+  .badge-conforme { background: var(--vert-fond);   color: var(--vert); }
+  .dot-urgent   { background: var(--rouge); }
+  .dot-moyen    { background: var(--orange); }
+  .dot-verif    { background: var(--verif); }
+  .dot-conforme { background: var(--vert); }
+
+  /* OBSERVATIONS */
+  .obs-list { display: flex; flex-direction: column; gap: 10px; margin: 0 10px; }
+
+  .obs-card { background: white; border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--gris-bord); }
+  .obs-card.p-urgent   { border-color: var(--rouge-bord); }
+  .obs-card.p-moyen    { border-color: var(--orange-bord); }
+  .obs-card.p-verif    { border-color: var(--bleu-bord); }
+  .obs-card.p-conforme { border-color: var(--vert-bord); }
+
+  .obs-hdr { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--gris-bord); }
+  .obs-card.p-urgent   .obs-hdr { background: var(--rouge-fond); border-bottom-color: var(--rouge-bord); }
+  .obs-card.p-moyen    .obs-hdr { background: var(--orange-fond); border-bottom-color: var(--orange-bord); }
+  .obs-card.p-verif    .obs-hdr { background: var(--bleu-clair); border-bottom-color: var(--bleu-bord); }
+  .obs-card.p-conforme .obs-hdr { background: var(--vert-fond); border-bottom-color: var(--vert-bord); }
+
+  .obs-num { width: 30px; height: 30px; border-radius: 50%; background: var(--bleu); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .obs-card.p-urgent   .obs-num { background: var(--rouge); }
+  .obs-card.p-moyen    .obs-num { background: var(--orange); }
+  .obs-card.p-verif    .obs-num { background: var(--verif); }
+  .obs-card.p-conforme .obs-num { background: var(--vert); }
+
+  .obs-loc-input { flex: 1; border: none; outline: none; font-size: 14px; font-weight: 600; background: transparent; color: var(--texte); min-width: 0; }
+  .obs-loc-input::placeholder { font-weight: 400; color: #aaa; font-size: 13px; }
+
+  .btn-del { background: none; border: none; color: #ccc; cursor: pointer; font-size: 22px; line-height: 1; padding: 4px; min-width: var(--touch); min-height: var(--touch); display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+  .btn-del:active { background: var(--rouge-fond); color: var(--rouge); }
+
+  /* SELECT PRIORITÉ — grand pour mobile */
+  .prio-wrap { padding: 12px 14px; border-bottom: 1px solid var(--gris-bord); }
+  .prio-wrap label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .prio-select { width: 100%; height: var(--touch); border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 0 12px; font-size: 15px; font-weight: 600; background: white; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235F5E5A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+  .prio-select.p-urgent   { background-color: var(--rouge-fond);  color: var(--rouge);  border-color: var(--rouge-bord); }
+  .prio-select.p-moyen    { background-color: var(--orange-fond); color: var(--orange); border-color: var(--orange-bord); }
+  .prio-select.p-verif    { background-color: var(--bleu-clair);  color: var(--verif);  border-color: var(--bleu-bord); }
+  .prio-select.p-conforme { background-color: var(--vert-fond);   color: var(--vert);   border-color: var(--vert-bord); }
+
+  /* CHAMPS TEXTE */
+  .obs-field { padding: 12px 14px; border-bottom: 1px solid var(--gris-bord); }
+  .obs-field:last-child { border-bottom: none; }
+  .obs-field label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .obs-field textarea { width: 100%; border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--texte); resize: none; min-height: 90px; background: var(--gris-fond); line-height: 1.5; font-family: inherit; }
+  .obs-field textarea:focus { outline: none; border-color: var(--bleu); background: white; }
+  .obs-field textarea.small { min-height: 60px; }
+
+  /* ZONE PHOTOS */
+  .photo-zone { padding: 12px 14px; border-top: 1px solid var(--gris-bord); }
+  .photo-zone > label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .photo-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 72px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px dashed; transition: all 0.15s; }
+  .photo-btn:active { transform: scale(0.97); }
+  .photo-btn-cam { color: #0F6E56; border-color: #5DCAA5; background: #E1F5EE; }
+  .photo-btn-gal { color: var(--verif); border-color: #85B7EB; background: var(--bleu-clair); }
+  .photo-btn svg { width: 28px; height: 28px; }
+  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .photo-thumb { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--gris-bord); }
+  .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-del { position: absolute; top: 5px; right: 5px; width: 28px; height: 28px; background: rgba(163,45,45,0.88); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+  .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(27,79,138,0.75); }
+  .photo-caption input { width: 100%; background: none; border: none; outline: none; color: white; font-size: 11px; padding: 4px 6px; text-align: center; font-family: inherit; }
+  .photo-caption input::placeholder { color: rgba(255,255,255,0.55); }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 80vh; border-radius: 8px; }
+  .lightbox-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: white; font-size: 24px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .lightbox-cap { color: white; font-size: 13px; margin-top: 12px; opacity: 0.75; text-align: center; }
+
+  /* SYNTHÈSE */
+  .synthese-urgents { background: var(--rouge-fond); border: 1.5px solid var(--rouge-bord); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  .synthese-urgents h4 { font-size: 13px; font-weight: 700; color: var(--rouge); margin-bottom: 4px; }
+  #synthese-liste { font-size: 13px; color: var(--rouge); font-style: italic; line-height: 1.5; }
+  .synthese-plan label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .synthese-plan textarea { width: 100%; border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--texte); resize: none; min-height: 80px; background: var(--gris-fond); line-height: 1.5; font-family: inherit; }
+  .synthese-plan textarea:focus { outline: none; border-color: var(--bleu); background: white; }
+
+  /* BTN AJOUTER */
+  .btn-add { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: var(--touch); background: var(--bleu); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; margin: 10px 0; }
+  .btn-add:active { background: #15407a; }
+  .btn-add svg { width: 20px; height: 20px; }
+  .btn-add-wrap { padding: 0 10px; }
+
+  /* SIGNATURE */
+  .sig-block { background: white; margin: 0 10px 16px; border-radius: var(--radius); padding: 14px; }
+  .sig-date-row label { font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+  .sig-date-row input { border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 8px 12px; font-size: 14px; width: 100%; outline: none; font-family: inherit; }
+  .sig-date-row input:focus { border-color: var(--bleu); }
+  .sig-info { margin-top: 12px; font-size: 13px; color: var(--texte-sec); line-height: 1.5; border-top: 1px solid var(--gris-bord); padding-top: 10px; }
+  .sig-info strong { font-size: 14px; display: block; color: var(--bleu); margin-bottom: 2px; }
+
+  .hidden-file { display: none; }
+
+  /* ÉCRAN DE VERROUILLAGE */
+  .lock-overlay { position: fixed; inset: 0; background: var(--bleu); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
+  .lock-overlay.hidden { display: none; }
+  .lock-logo { font-size: 32px; font-weight: 900; color: white; letter-spacing: -1px; margin-bottom: 4px; }
+  .lock-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 40px; text-align: center; line-height: 1.4; }
+  .lock-icon { font-size: 48px; margin-bottom: 20px; }
+  .lock-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; align-self: flex-start; width: 100%; max-width: 300px; }
+  .lock-input { width: 100%; max-width: 300px; height: 52px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); color: white; font-size: 18px; font-family: inherit; padding: 0 16px; outline: none; letter-spacing: 2px; text-align: center; }
+  .lock-input:focus { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.18); }
+  .lock-input::placeholder { color: rgba(255,255,255,0.35); letter-spacing: 0; font-size: 14px; }
+  .lock-btn { margin-top: 14px; width: 100%; max-width: 300px; height: 52px; border-radius: 10px; border: none; background: white; color: var(--bleu); font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .lock-btn:active { background: #E6F1FB; }
+  .lock-error { margin-top: 12px; font-size: 13px; color: #FFB3B3; min-height: 20px; text-align: center; }
+  .lock-copyright { position: absolute; bottom: 20px; font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; }
+
+  /* BANDEAU ÉDITION VERROUILLÉE */
+  .edit-lock-bar { background: var(--orange-fond); border-bottom: 1px solid var(--orange-bord); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .edit-lock-bar.hidden { display: none; }
+  .edit-lock-text { font-size: 13px; color: var(--orange); font-weight: 600; }
+  .edit-unlock-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; min-height: 40px; font-family: inherit; }
+  .edit-unlock-btn:active { filter: brightness(0.9); }
+
+  /* MODAL DÉVERROUILLAGE ÉDITION */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .modal-overlay.hidden { display: none; }
+  .modal-box { background: white; border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 320px; }
+  .modal-title { font-size: 16px; font-weight: 700; color: var(--bleu); margin-bottom: 6px; }
+  .modal-sub { font-size: 13px; color: var(--texte-sec); margin-bottom: 18px; }
+  .modal-input { width: 100%; height: 48px; border: 1.5px solid var(--gris-bord); border-radius: 8px; font-size: 16px; font-family: inherit; padding: 0 14px; outline: none; letter-spacing: 2px; text-align: center; }
+  .modal-input:focus { border-color: var(--bleu); }
+  .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  .modal-cancel { background: var(--gris-fond); color: var(--texte-sec); border: none; border-radius: 8px; height: 44px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .modal-confirm { background: var(--bleu); color: white; border: none; border-radius: 8px; height: 44px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .modal-error { font-size: 12px; color: var(--rouge); margin-top: 8px; min-height: 18px; text-align: center; }
+
+  /* PIED COPYRIGHT */
+  .copyright-bar { background: var(--bleu); color: rgba(255,255,255,0.6); text-align: center; padding: 12px 16px; font-size: 11px; line-height: 1.5; }
+  .copyright-bar strong { color: rgba(255,255,255,0.9); }
+
+  /* PRINT */
+  @media print {
+    .toolbar, .btn-add, .btn-add-wrap, .btn-del, .photo-btn, .photo-del, .hidden-file, #save-status, .prio-select { display: none !important; }
+    body { background: white; }
+    .section, .obs-card, .sig-block { margin: 0 0 8px; border-radius: 0; border: 1px solid #D3D1C7; }
+    .obs-list { margin: 0; }
+    .obs-card { page-break-inside: avoid; }
+    input, textarea { border: none !important; background: transparent !important; resize: none !important; overflow: visible !important; min-height: 0 !important; font-size: 11px !important; }
+    .header { background: #1B4F8A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .obs-card.p-urgent   { border-color: #F7C1C1 !important; }
+    .obs-card.p-urgent .obs-hdr  { background: #FCEBEB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .obs-card.p-moyen .obs-hdr   { background: #FAEEDA !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .obs-card.p-verif .obs-hdr   { background: #E6F1FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .obs-card.p-conforme .obs-hdr{ background: #EAF3DE !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .synthese-urgents { background: #FCEBEB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .photo-thumb { width: 120px !important; height: 90px !important; }
+    .photo-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ÉCRAN DE VERROUILLAGE À L'OUVERTURE -->
+<div class="lock-overlay" id="lock-overlay">
+  <div class="lock-icon">🔒</div>
+  <div class="lock-logo">CESI</div>
+  <div class="lock-title">Rapport de Visite des Lieux de Travail<br>SEPP – Outil réservé à un usage professionnel</div>
+  <div class="lock-label">Mot de passe</div>
+  <input class="lock-input" id="lock-input" type="password" placeholder="Entrez le mot de passe…" autocomplete="off" onkeydown="if(event.key==='Enter')checkLock()">
+  <button class="lock-btn" onclick="checkLock()">Accéder au rapport</button>
+  <div class="lock-error" id="lock-error"></div>
+  <div class="lock-copyright">© 2026 Faïçal DAHMANI – Tous droits réservés</div>
+</div>
+
+<!-- MODAL DÉVERROUILLAGE ÉDITION -->
+<div class="modal-overlay hidden" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-title">🔓 Déverrouiller l'édition</div>
+    <div class="modal-sub">Entrez le mot de passe pour modifier ce rapport.</div>
+    <input class="modal-input" id="modal-input" type="password" placeholder="Mot de passe…" autocomplete="off" onkeydown="if(event.key==='Enter')checkEdit()">
+    <div class="modal-error" id="modal-error"></div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeEditModal()">Annuler</button>
+      <button class="modal-confirm" onclick="checkEdit()">Déverrouiller</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div class="lightbox-cap" id="lb-cap"></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <button class="tbtn tbtn-green" onclick="saveHTMLFile()">💾 Sauvegarder</button>
+  <button class="tbtn tbtn-blue"  onclick="exportWord()">📄 Word</button>
+  <button class="tbtn tbtn-dark"  onclick="window.print()">🖨 PDF</button>
+  <button class="tbtn tbtn-grey"  onclick="clearSave()">🗑</button>
+  <span id="save-status" style="margin-left:4px;"></span>
+</div>
+
+<!-- BANDEAU ÉDITION VERROUILLÉE -->
+<div class="edit-lock-bar" id="edit-lock-bar">
+  <span class="edit-lock-text">🔒 Mode lecture — édition verrouillée</span>
+  <button class="edit-unlock-btn" onclick="openEditModal()">Déverrouiller</button>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="cesi-logo">CESI</div>
+      <h1>Rapport de Visite des Lieux de Travail</h1>
+    </div>
+  </div>
+  <div class="header-fields">
+    <div class="h-field">
+      <label>Référence</label>
+      <input id="inp-ref" type="text" placeholder="ex: 131240.6" inputmode="text">
+    </div>
+    <div class="h-field">
+      <label>Date rapport</label>
+      <input id="inp-date" type="text" placeholder="jj/mm/aaaa" inputmode="text">
+    </div>
+  </div>
+</div>
+
+<!-- INFOS GÉNÉRALES -->
+<div class="section" style="margin-top:10px;">
+  <div class="sec-header">Informations générales</div>
+  <div class="sec-body">
+    <div class="info-rows">
+      <div class="info-row"><label>Entreprise / Organisation</label><input type="text" placeholder="Nom de l'entreprise"></div>
+      <div class="info-row"><label>Adresse visitée</label><input type="text" placeholder="Rue, numéro, code postal, commune"></div>
+      <div class="info-row"><label>Siège social</label><input type="text" placeholder="Si différent de l'adresse visitée"></div>
+      <div class="info-row"><label>Code NACE</label><input type="text" placeholder="ex: 86.901 – Laboratoires médicaux" inputmode="text"></div>
+      <div class="info-row"><label>Date de la visite</label><input type="text" placeholder="ex: Jeudi 16 avril 2026"></div>
+      <div class="info-row"><label>Type de visite</label><input type="text" value="Visite d'entreprise périodique (Art. II.3-53 et II.3-55 CBET)"></div>
+      <div class="info-row"><label>Médecin du travail</label><input type="text" placeholder="Dr Prénom NOM – N° projet :"></div>
+      <div class="info-row"><label>Conseiller en prévention</label><input type="text" value="Faïçal DAHMANI – Conseiller en prévention niveau 1 – CESI SEPP"></div>
+      <div class="info-row"><label>Personne(s) accompagnante(s)</label><input type="text" placeholder="Nom, prénom, fonction"></div>
+    </div>
+  </div>
+</div>
+
+<!-- LÉGENDE -->
+<div class="section">
+  <div class="sec-header">Niveaux de priorité</div>
+  <div class="sec-body">
+    <div class="legende">
+      <div class="badge badge-urgent"><div class="badge-dot dot-urgent"></div>URGENT — Action immédiate requise</div>
+      <div class="badge badge-moyen"><div class="badge-dot dot-moyen"></div>MOYEN TERME — 3 à 6 mois</div>
+      <div class="badge badge-verif"><div class="badge-dot dot-verif"></div>À VÉRIFIER — Expert agréé</div>
+      <div class="badge badge-conforme"><div class="badge-dot dot-conforme"></div>CONFORME — Maintenir les bonnes pratiques</div>
+    </div>
+  </div>
+</div>
+
+<!-- TITRE OBSERVATIONS -->
+<div style="padding: 14px 10px 6px; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 1.2px;">
+  Constatations et recommandations
+</div>
+
+<!-- LISTE OBSERVATIONS -->
+<div class="obs-list" id="obs-list"></div>
+
+<!-- BOUTON AJOUTER -->
+<div class="btn-add-wrap">
+  <button class="btn-add" onclick="addObs()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    Ajouter une observation
+  </button>
+</div>
+
+<!-- SYNTHÈSE -->
+<div class="section">
+  <div class="sec-header">Synthèse et suites à donner</div>
+  <div class="sec-body">
+    <div class="synthese-urgents">
+      <h4 id="synth-titre">Points urgents à traiter immédiatement :</h4>
+      <div id="synthese-liste" style="font-style:italic;">— Aucun point urgent pour l'instant —</div>
+    </div>
+    <div class="synthese-plan">
+      <label>Intégration dans le plan de prévention</label>
+      <textarea rows="4">L'ensemble des recommandations doit être intégré dans le plan annuel d'action (art. II.1-7 CBET) et pour les actions structurelles dans le plan global de prévention à 5 ans (art. II.1-6 CBET). Ce rapport est remis à l'employeur conformément à l'art. II.3-53 §3 CBET.</textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SIGNATURE -->
+<div class="sig-block">
+  <div class="sig-date-row">
+    <label>Date de signature</label>
+    <input id="inp-date-sign" type="text" placeholder="jj/mm/aaaa">
+  </div>
+  <div class="sig-info">
+    <strong>Faïçal DAHMANI</strong>
+    Conseiller en prévention niveau 1<br>
+    Service Externe de Prévention et de Protection au Travail – CESI<br>
+    faical.dahmani@cesi.be | 02 771 00 25<br>
+    CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles
+  </div>
+</div>
+
+<script>
+let obsCount = 0;
+const SAVE_KEY = 'vlt_mobile_v1';
+let saveTimer = null;
+
+function prioClass(v) {
+  return v==='URGENT'?'p-urgent':v==='MOYEN TERME'?'p-moyen':v==='À VÉRIFIER'?'p-verif':v==='CONFORME'?'p-conforme':'';
+}
+
+function buildObsHTML(id) {
+  return `
+    <div class="obs-hdr" id="hdr-${id}">
+      <div class="obs-num" id="num-${id}">${id}</div>
+      <input class="obs-loc-input" id="loc-${id}" type="text" placeholder="Localisation…" oninput="scheduleSave()">
+      <button class="btn-del" onclick="delObs(${id})">✕</button>
+    </div>
+    <div class="prio-wrap">
+      <label>Niveau de priorité</label>
+      <select class="prio-select" id="prio-${id}" onchange="updatePrio(${id})">
+        <option value="">Choisir…</option>
+        <option value="URGENT">🔴 URGENT</option>
+        <option value="MOYEN TERME">🟠 MOYEN TERME</option>
+        <option value="À VÉRIFIER">🔵 À VÉRIFIER</option>
+        <option value="CONFORME">🟢 CONFORME</option>
+      </select>
+    </div>
+    <div class="obs-field">
+      <label>Constatation(s)</label>
+      <textarea id="const-${id}" placeholder="Décrivez l'anomalie observée…" oninput="scheduleSave()"></textarea>
+    </div>
+    <div class="obs-field">
+      <label>Recommandation(s)</label>
+      <textarea id="reco-${id}" placeholder="Mesures de prévention à mettre en place…" oninput="scheduleSave()"></textarea>
+    </div>
+    <div class="obs-field">
+      <label>Référence légale (CBET 2017)</label>
+      <textarea id="ref-${id}" class="small" placeholder="ex: Art. III.1-5 CBET…" oninput="scheduleSave()"></textarea>
+    </div>
+    <div class="photo-zone">
+      <label>📷 Photo(s)</label>
+      <div class="photo-btns">
+        <div class="photo-btn photo-btn-cam" onclick="document.getElementById('fcam-${id}').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Appareil photo
+        </div>
+        <div class="photo-btn photo-btn-gal" onclick="document.getElementById('fgal-${id}').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          Galerie
+        </div>
+      </div>
+      <div class="photo-grid" id="photos-${id}"></div>
+      <input type="file" class="hidden-file" id="fcam-${id}" accept="image/*" capture="environment" onchange="handlePhotos(${id},this)">
+      <input type="file" class="hidden-file" id="fgal-${id}" accept="image/*" multiple onchange="handlePhotos(${id},this)">
+    </div>`;
+}
+
+function addObs() {
+  obsCount++;
+  const id = obsCount;
+  const card = document.createElement('div');
+  card.className = 'obs-card';
+  card.id = 'obs-' + id;
+  card.innerHTML = buildObsHTML(id);
+  document.getElementById('obs-list').appendChild(card);
+  updateSynthese(); scheduleSave();
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => document.getElementById('loc-' + id).focus(), 400);
+}
+
+function updatePrio(id) {
+  const sel = document.getElementById('prio-' + id);
+  const v = sel.value;
+  sel.className = 'prio-select ' + prioClass(v);
+  const card = document.getElementById('obs-' + id);
+  card.className = 'obs-card ' + prioClass(v);
+  updateSynthese(); scheduleSave();
+}
+
+function delObs(id) {
+  const card = document.getElementById('obs-' + id);
+  if (card && confirm('Supprimer cette observation ?')) {
+    card.remove(); renumberObs(); updateSynthese(); scheduleSave();
+  }
+}
+
+function renumberObs() {
+  document.querySelectorAll('.obs-card').forEach((card, i) => {
+    const m = card.id.match(/obs-(\d+)/);
+    if (m) { const el = document.getElementById('num-' + m[1]); if (el) el.textContent = i + 1; }
+  });
+}
+
+function handlePhotos(id, input) {
+  Array.from(input.files).forEach(f => {
+    const reader = new FileReader();
+    reader.onload = e => { addPhotoSrc(id, e.target.result, ''); scheduleSave(); };
+    reader.readAsDataURL(f);
+  });
+  input.value = '';
+}
+
+function addPhotoSrc(id, src, caption) {
+  const grid = document.getElementById('photos-' + id);
+  const thumb = document.createElement('div');
+  thumb.className = 'photo-thumb';
+  const capVal = (caption || '').replace(/"/g, '&quot;');
+  thumb.innerHTML = `
+    <img src="${src}" alt="Photo" onclick="openLightbox('${src.replace(/'/g,"\\'")}', this.parentElement.querySelector('input').value)">
+    <button class="photo-del" onclick="this.parentElement.remove();scheduleSave()">✕</button>
+    <div class="photo-caption"><input type="text" placeholder="Légende…" value="${capVal}" oninput="scheduleSave()"></div>`;
+  grid.appendChild(thumb);
+}
+
+function openLightbox(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+function updateSynthese() {
+  const urgents = [];
+  document.querySelectorAll('.obs-card').forEach((card, i) => {
+    const m = card.id.match(/obs-(\d+)/);
+    if (!m) return;
+    const id = m[1];
+    const prio = document.getElementById('prio-' + id);
+    const loc  = document.getElementById('loc-'  + id);
+    if (prio && prio.value === 'URGENT') urgents.push(loc && loc.value.trim() ? loc.value.trim() : 'Obs. ' + (i+1));
+  });
+  const titre = document.getElementById('synth-titre');
+  const liste  = document.getElementById('synthese-liste');
+  if (!urgents.length) {
+    titre.textContent = 'Points urgents à traiter immédiatement :';
+    liste.textContent = "— Aucun point urgent pour l'instant —";
+    liste.style.fontStyle = 'italic';
+  } else {
+    titre.textContent = urgents.length + ' point' + (urgents.length > 1 ? 's' : '') + ' urgent' + (urgents.length > 1 ? 's' : '') + ' :';
+    liste.innerHTML = urgents.map(u => `• ${u}`).join('<br>');
+    liste.style.fontStyle = 'normal';
+  }
+}
+
+function showSaveStatus(msg, color) {
+  const el = document.getElementById('save-status');
+  el.textContent = msg; el.style.color = color || '#3B6D11'; el.style.opacity = '1';
+  clearTimeout(el._t); el._t = setTimeout(() => { el.style.opacity = '0.3'; }, 2500);
+}
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 1200);
+  showSaveStatus('…', '#854F0B');
+}
+
+function collectData() {
+  const infos = [...document.querySelectorAll('.info-rows .info-row input')].map(el => el.value);
+  const obs = [];
+  document.querySelectorAll('.obs-card').forEach(card => {
+    const m = card.id.match(/obs-(\d+)/);
+    if (!m) return;
+    const id = m[1];
+    const photos = [];
+    card.querySelectorAll('.photo-thumb').forEach(thumb => {
+      const img = thumb.querySelector('img');
+      const cap = thumb.querySelector('input');
+      if (img) photos.push({ src: img.src, caption: cap ? cap.value : '' });
+    });
+    obs.push({
+      id,
+      loc:    (document.getElementById('loc-'+id)||{}).value||'',
+      prio:   (document.getElementById('prio-'+id)||{}).value||'',
+      const_: (document.getElementById('const-'+id)||{}).value||'',
+      reco:   (document.getElementById('reco-'+id)||{}).value||'',
+      ref:    (document.getElementById('ref-'+id)||{}).value||'',
+      photos
+    });
+  });
+  return {
+    ref: document.getElementById('inp-ref').value,
+    date: document.getElementById('inp-date').value,
+    dateSign: document.getElementById('inp-date-sign').value,
+    synthesePlan: document.querySelector('.synthese-plan textarea').value,
+    infos, obs
+  };
+}
+
+function saveData() {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(collectData())); showSaveStatus('✓', '#3B6D11'); }
+  catch(e) { showSaveStatus('⚠', '#A32D2D'); }
+}
+
+function restoreData() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) { addObs(); return; }
+    const data = JSON.parse(raw);
+    if (data.ref)          document.getElementById('inp-ref').value = data.ref;
+    if (data.date)         document.getElementById('inp-date').value = data.date;
+    if (data.dateSign)     document.getElementById('inp-date-sign').value = data.dateSign;
+    if (data.synthesePlan) document.querySelector('.synthese-plan textarea').value = data.synthesePlan;
+    const infoInputs = document.querySelectorAll('.info-rows .info-row input');
+    (data.infos||[]).forEach((v,i) => { if (infoInputs[i]) infoInputs[i].value = v; });
+    if (data.obs && data.obs.length > 0) {
+      data.obs.forEach(o => {
+        obsCount++;
+        const id = obsCount;
+        const card = document.createElement('div');
+        card.className = 'obs-card ' + prioClass(o.prio||'');
+        card.id = 'obs-' + id;
+        card.innerHTML = buildObsHTML(id);
+        document.getElementById('obs-list').appendChild(card);
+        document.getElementById('loc-'+id).value    = o.loc    || '';
+        document.getElementById('const-'+id).value  = o.const_ || '';
+        document.getElementById('reco-'+id).value   = o.reco   || '';
+        document.getElementById('ref-'+id).value    = o.ref    || '';
+        const sel = document.getElementById('prio-'+id);
+        if (o.prio) { sel.value = o.prio; sel.className = 'prio-select ' + prioClass(o.prio); }
+        (o.photos||[]).forEach(p => addPhotoSrc(id, p.src, p.caption||''));
+      });
+    } else { addObs(); }
+    updateSynthese(); showSaveStatus('✓', '#185FA5');
+  } catch(e) { addObs(); }
+}
+
+function clearSave() {
+  if (confirm('Effacer toutes les données et recommencer ?')) { localStorage.removeItem(SAVE_KEY); location.reload(); }
+}
+
+function exportWord() {
+  showSaveStatus('⏳', '#185FA5');
+  const data = collectData();
+  const infoLabels = [...document.querySelectorAll('.info-rows .info-row label')].map(el => el.textContent.trim());
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+body{font-family:Arial,sans-serif;font-size:11pt;color:#2C2C2A;margin:2cm;}
+.hblk{background:#1B4F8A;color:white;padding:16px;margin-bottom:16px;}
+.stitle{font-size:9pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;border-bottom:2px solid #1B4F8A;margin:14px 0 6px;padding-bottom:3px;}
+table.info{width:100%;border-collapse:collapse;margin-bottom:10px;}
+table.info td{border:1px solid #D3D1C7;padding:5px 8px;font-size:10pt;}
+table.info td.lbl{background:#E6F1FB;color:#1B4F8A;font-weight:bold;width:36%;}
+.obs{border:1px solid #D3D1C7;border-radius:4px;margin-bottom:12px;page-break-inside:avoid;}
+.obs-hd{padding:7px 12px;border-bottom:1px solid #D3D1C7;}
+.obs-hd.hU{background:#FCEBEB;}.obs-hd.hM{background:#FAEEDA;}.obs-hd.hV{background:#E6F1FB;}.obs-hd.hC{background:#EAF3DE;}
+.obs-hd strong{color:#1B4F8A;}.pf{float:right;}
+.bdg{display:inline-block;padding:2px 8px;border-radius:3px;font-size:8pt;font-weight:bold;}
+.bU{background:#FCEBEB;color:#A32D2D;}.bM{background:#FAEEDA;color:#854F0B;}.bV{background:#E6F1FB;color:#185FA5;}.bC{background:#EAF3DE;color:#3B6D11;}
+table.ob{width:100%;border-collapse:collapse;}
+table.ob td{border:1px solid #D3D1C7;padding:7px 10px;vertical-align:top;width:50%;}
+table.ob td.full{width:100%;}
+.fl{font-size:8pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;display:block;margin-bottom:3px;}
+.prow{padding:7px 10px;border-top:1px solid #D3D1C7;}
+.prow img{width:170px;height:130px;object-fit:cover;margin:4px 4px 0 0;border:1px solid #D3D1C7;border-radius:3px;vertical-align:top;}
+.sU{background:#FCEBEB;border:1px solid #F7C1C1;padding:8px 12px;border-radius:4px;margin-bottom:8px;}
+.sU strong{color:#A32D2D;font-size:10pt;}.sU p{color:#A32D2D;margin-top:4px;}
+.sbody{border:1px solid #D3D1C7;padding:8px 12px;border-radius:4px;font-size:10pt;}
+.sig{margin-top:20px;border-top:1px solid #D3D1C7;padding-top:12px;display:flex;justify-content:space-between;font-size:9pt;color:#5F5E5A;}
+.sig-r{text-align:right;}.sig-r strong{color:#1B4F8A;font-size:11pt;display:block;}
+</style></head><body>
+<div class="hblk">
+  <div style="float:right;text-align:right;font-size:9pt;color:white;">Réf. ${data.ref}<br>${data.date}</div>
+  <div style="color:white;font-size:20pt;font-weight:900;">CESI</div>
+  <div style="color:white;font-size:13pt;font-weight:bold;margin:4px 0;">RAPPORT DE VISITE DES LIEUX DE TRAVAIL</div>
+  <p style="color:white;font-size:9pt;margin:2px 0;">Conformément aux art. II.3-53 et II.3-55 CBET — Loi du 4 août 1996</p>
+  <p style="color:white;font-size:9pt;margin:2px 0;">Service Externe de Prévention et de Protection au Travail (SEPP)</p>
+</div>
+<div class="stitle">Informations générales</div>
+<table class="info">`;
+  infoLabels.forEach((lbl,i) => { html += `<tr><td class="lbl">${lbl}</td><td>${data.infos[i]||''}</td></tr>`; });
+  html += `</table><div class="stitle">Constatations et recommandations</div>`;
+  data.obs.forEach((o,i) => {
+    const pc = o.prio==='URGENT'?'bU':o.prio==='MOYEN TERME'?'bM':o.prio==='À VÉRIFIER'?'bV':o.prio==='CONFORME'?'bC':'';
+    const hc = o.prio==='URGENT'?'hU':o.prio==='MOYEN TERME'?'hM':o.prio==='À VÉRIFIER'?'hV':o.prio==='CONFORME'?'hC':'';
+    html += `<div class="obs"><div class="obs-hd ${hc}"><span class="pf">${o.prio?`<span class="bdg ${pc}">${o.prio}</span>`:''}</span><strong>${i+1}. ${o.loc||'Localisation non renseignée'}</strong></div>
+    <table class="ob"><tr>
+      <td><span class="fl">Constatation(s)</span>${(o.const_||'').replace(/\n/g,'<br>')}</td>
+      <td><span class="fl">Recommandation(s)</span>${(o.reco||'').replace(/\n/g,'<br>')}</td>
+    </tr><tr><td colspan="2" class="full"><span class="fl">Référence légale (CBET 2017)</span>${(o.ref||'').replace(/\n/g,'<br>')}</td></tr></table>`;
+    if (o.photos && o.photos.length) {
+      html += `<div class="prow"><span class="fl">Photo(s)</span><br>`;
+      o.photos.forEach(p => { html += `<span style="display:inline-block;margin-right:6px;text-align:center;vertical-align:top;"><img src="${p.src}">${p.caption?`<br><small style="color:#666;">${p.caption}</small>`:''}</span>`; });
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+  const urgents = data.obs.filter(o => o.prio === 'URGENT').map(o => o.loc||'?');
+  html += `<div class="stitle">Synthèse et suites à donner</div>
+<div class="sU"><strong>${urgents.length} point${urgents.length>1?'s':''} urgent${urgents.length>1?'s':''} :</strong><p>${urgents.length?urgents.join(' | '):'— Aucun —'}</p></div>
+<div class="sbody">${data.synthesePlan}</div>
+<div class="sig">
+  <div>Fait à Bruxelles, le ${data.dateSign}<br><br>CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles<br>T: 02 771 00 25 | faical.dahmani@cesi.be</div>
+  <div class="sig-r"><strong>Faïçal DAHMANI</strong>Conseiller en prévention niveau 1<br>SEPP – CESI</div>
+</div></body></html>`;
+  const blob = new Blob(['\ufeff'+html], {type:'application/msword;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ent = (data.infos[0]||'VLT').replace(/[^a-zA-Z0-9]/g,'_');
+  const dt = data.date.replace(/\//g,'-')||'date';
+  a.href=url; a.download=`VLT_${ent}_${dt}.doc`; a.click(); URL.revokeObjectURL(url);
+  showSaveStatus('✓', '#3B6D11');
+}
+
+function saveHTMLFile() {
+  showSaveStatus('⏳', '#185FA5');
+  const data = collectData();
+  const clone = document.documentElement.cloneNode(true);
+  clone.querySelector('#inp-ref').value = data.ref;
+  clone.querySelector('#inp-date').value = data.date;
+  clone.querySelector('#inp-date-sign').value = data.dateSign;
+  clone.querySelector('.synthese-plan textarea').value = data.synthesePlan;
+  const ci = clone.querySelectorAll('.info-rows .info-row input');
+  (data.infos||[]).forEach((v,i) => { if (ci[i]) ci[i].value = v; });
+  clone.querySelector('#obs-list').innerHTML = document.querySelector('#obs-list').innerHTML;
+  const ent = (data.infos[0]||'VLT').replace(/[^a-zA-Z0-9]/g,'_');
+  const dt  = data.date.replace(/\//g,'-')||new Date().toISOString().slice(0,10);
+  const newKey = `vlt_${ent}_${dt}`;
+  clone.querySelectorAll('script').forEach(s => {
+    if (s.textContent.includes('SAVE_KEY')) s.textContent = s.textContent.replace(/const SAVE_KEY = '[^']+';/, `const SAVE_KEY = '${newKey}';`);
+  });
+  const blob = new Blob(['<!DOCTYPE html>\n'+clone.outerHTML], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=`VLT_${ent}_${dt}.html`; a.click(); URL.revokeObjectURL(url);
+  showSaveStatus('✓', '#3B6D11');
+}
+
+restoreData();
+document.addEventListener('input', scheduleSave);
+document.addEventListener('change', scheduleSave);
+
+// ─── MOT DE PASSE & PROTECTION ────────────────────────────
+const PWD_HASH = hashStr('VLT-dahmani');
+let editUnlocked = false;
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) { h = (Math.imul(31, h) + s.charCodeAt(i)) | 0; }
+  return h;
+}
+
+function checkLock() {
+  const val = document.getElementById('lock-input').value;
+  if (hashStr(val) === PWD_HASH) {
+    document.getElementById('lock-overlay').classList.add('hidden');
+    document.getElementById('lock-input').value = '';
+    applyLockState();
+  } else {
+    const err = document.getElementById('lock-error');
+    err.textContent = 'Mot de passe incorrect. Veuillez réessayer.';
+    document.getElementById('lock-input').value = '';
+    document.getElementById('lock-input').focus();
+    setTimeout(() => { err.textContent = ''; }, 3000);
+  }
+}
+
+function applyLockState() {
+  const locked = !editUnlocked;
+  const bar = document.getElementById('edit-lock-bar');
+  bar.classList.toggle('hidden', !locked);
+  document.querySelectorAll('input:not(#lock-input):not(#modal-input), textarea, select').forEach(el => {
+    el.readOnly = locked;
+    el.disabled = locked && el.tagName === 'SELECT';
+    el.style.pointerEvents = locked ? 'none' : '';
+    el.style.userSelect = locked ? 'none' : '';
+  });
+  document.querySelectorAll('.btn-del, .btn-add, .photo-btn, .tbtn-grey').forEach(el => {
+    el.style.display = locked ? 'none' : '';
+  });
+  document.querySelectorAll('#fcam-0, #fgal-0').forEach(el => { if(locked) el.disabled = true; });
+}
+
+function openEditModal() {
+  document.getElementById('edit-modal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.add('hidden');
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-error').textContent = '';
+}
+
+function checkEdit() {
+  const val = document.getElementById('modal-input').value;
+  if (hashStr(val) === PWD_HASH) {
+    editUnlocked = true;
+    closeEditModal();
+    applyLockState();
+  } else {
+    const err = document.getElementById('modal-error');
+    err.textContent = 'Mot de passe incorrect.';
+    document.getElementById('modal-input').value = '';
+    document.getElementById('modal-input').focus();
+    setTimeout(() => { err.textContent = ''; }, 2500);
+  }
+}
+
+// Afficher l'écran de verrouillage au chargement
+window.addEventListener('load', () => {
+  document.getElementById('lock-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('lock-input').focus(), 200);
+});
+</script>
+
+<!-- PIED DE PAGE COPYRIGHT -->
+<div class="copyright-bar">
+  <strong>© 2026 Faïçal DAHMANI – Tous droits réservés</strong><br>
+  Outil VLT – CESI Service Externe de Prévention et de Protection au Travail<br>
+  Reproduction, distribution ou modification interdites sans autorisation écrite.
+</div>
+
+</body>
+</html>
