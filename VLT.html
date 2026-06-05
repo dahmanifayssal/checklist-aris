@@ -2,574 +2,738 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>VLT – CESI SEPP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VLT – Rapport de Visite des Lieux de Travail</title>
 <style>
   :root {
-    --bleu: #1B4F8A;
+    --bleu-cesi: #1B4F8A;
     --bleu-clair: #E6F1FB;
-    --bleu-bord: #B5D4F4;
-    --gris-fond: #F4F3F0;
+    --gris-fond: #F7F7F5;
     --gris-bord: #D3D1C7;
-    --rouge: #A32D2D;
+    --rouge-urgent: #A32D2D;
     --rouge-fond: #FCEBEB;
-    --rouge-bord: #F7C1C1;
-    --orange: #854F0B;
+    --orange-moyen: #854F0B;
     --orange-fond: #FAEEDA;
-    --orange-bord: #FAC775;
-    --vert: #3B6D11;
+    --bleu-verif: #185FA5;
+    --bleu-verif-fond: #E6F1FB;
+    --vert-conforme: #3B6D11;
     --vert-fond: #EAF3DE;
-    --vert-bord: #C0DD97;
-    --verif: #185FA5;
     --texte: #2C2C2A;
     --texte-sec: #5F5E5A;
-    --radius: 10px;
-    --touch: 48px;
+    --blanc: #ffffff;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html { font-size: 16px; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 15px; color: var(--texte); background: var(--gris-fond); }
 
-  /* HEADER */
-  .header { background: var(--bleu); color: white; padding: 16px 16px 14px; }
-  .header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
-  .cesi-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
-  .header h1 { font-size: 13px; font-weight: 600; opacity: 0.9; margin-top: 2px; line-height: 1.3; }
-  .header-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .h-field label { display: block; font-size: 10px; opacity: 0.7; margin-bottom: 2px; }
-  .h-field input { width: 100%; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 6px; color: white; font-size: 14px; padding: 7px 10px; outline: none; }
-  .h-field input::placeholder { color: rgba(255,255,255,0.45); font-size: 13px; }
-  .h-field input:focus { background: rgba(255,255,255,0.20); border-color: rgba(255,255,255,0.6); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* TOOLBAR MOBILE */
-  .toolbar { background: white; border-bottom: 1px solid var(--gris-bord); padding: 10px 12px; display: flex; gap: 8px; align-items: center; overflow-x: auto; -webkit-overflow-scrolling: touch; position: sticky; top: 0; z-index: 100; }
-  .toolbar::-webkit-scrollbar { display: none; }
-  #save-status { font-size: 12px; color: var(--vert); opacity: 0.5; transition: opacity 0.4s; flex-shrink: 0; white-space: nowrap; }
-  .tbtn { border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; display: flex; align-items: center; gap: 5px; min-height: var(--touch); }
-  .tbtn-green { background: #2E7D32; color: white; }
-  .tbtn-blue  { background: var(--bleu); color: white; }
-  .tbtn-dark  { background: #444; color: white; }
-  .tbtn-grey  { background: #bbb; color: white; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 13px;
+    color: var(--texte);
+    background: var(--gris-fond);
+    padding: 0;
+  }
 
-  /* SECTION */
-  .section { background: white; margin: 10px 10px 0; border-radius: var(--radius); overflow: hidden; }
-  .section:last-of-type { margin-bottom: 10px; }
-  .sec-header { background: var(--bleu); color: white; padding: 10px 14px; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
-  .sec-body { padding: 12px 14px; }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
 
-  /* INFOS GRID */
-  .info-rows { display: flex; flex-direction: column; gap: 0; }
-  .info-row { display: flex; flex-direction: column; border-bottom: 1px solid var(--gris-bord); padding: 8px 0; }
-  .info-row:last-child { border-bottom: none; }
-  .info-row label { font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-  .info-row input { border: none; outline: none; font-size: 14px; color: var(--texte); background: transparent; width: 100%; padding: 2px 0; }
-  .info-row input:focus { background: var(--bleu-clair); border-radius: 4px; padding: 2px 6px; }
+  .header {
+    background: var(--bleu-cesi);
+    color: white;
+    padding: 24px 32px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-left h1 { font-size: 15px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 4px; font-family: Arial, sans-serif; }
+  .header-left p { font-size: 11px; opacity: 0.85; font-family: Arial, sans-serif; }
+  .header-right { text-align: right; font-family: Arial, sans-serif; font-size: 11px; opacity: 0.85; }
+  .header-right .ref { font-size: 13px; font-weight: bold; opacity: 1; }
+  .cesi-logo { font-size: 22px; font-weight: 900; font-family: Arial, sans-serif; letter-spacing: -1px; }
 
-  /* LÉGENDE */
-  .legende { display: flex; flex-direction: column; gap: 6px; }
-  .badge { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 600; }
-  .badge-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .badge-urgent   { background: var(--rouge-fond);  color: var(--rouge); }
-  .badge-moyen    { background: var(--orange-fond); color: var(--orange); }
-  .badge-verif    { background: var(--bleu-clair);  color: var(--verif); }
-  .badge-conforme { background: var(--vert-fond);   color: var(--vert); }
-  .dot-urgent   { background: var(--rouge); }
-  .dot-moyen    { background: var(--orange); }
-  .dot-verif    { background: var(--verif); }
-  .dot-conforme { background: var(--vert); }
+  .section { padding: 20px 32px; border-bottom: 1px solid var(--gris-bord); }
+  .section-title { font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; color: var(--bleu-cesi); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--bleu-cesi); display: inline-block; }
 
-  /* OBSERVATIONS */
-  .obs-list { display: flex; flex-direction: column; gap: 10px; margin: 0 10px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--gris-bord); border-radius: 4px; overflow: hidden; }
+  .info-row { display: contents; }
+  .info-label { background: var(--bleu-clair); padding: 7px 12px; font-weight: bold; font-family: Arial, sans-serif; font-size: 11px; color: var(--bleu-cesi); border-bottom: 1px solid var(--gris-bord); border-right: 1px solid var(--gris-bord); }
+  .info-value { padding: 7px 12px; border-bottom: 1px solid var(--gris-bord); font-family: Arial, sans-serif; font-size: 12px; }
+  .info-value input, .info-value select { width: 100%; border: none; outline: none; font-family: Arial, sans-serif; font-size: 12px; color: var(--texte); background: transparent; padding: 0; }
+  .info-value input:focus { background: #f0f7ff; border-radius: 2px; }
 
-  .obs-card { background: white; border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--gris-bord); }
-  .obs-card.p-urgent   { border-color: var(--rouge-bord); }
-  .obs-card.p-moyen    { border-color: var(--orange-bord); }
-  .obs-card.p-verif    { border-color: var(--bleu-bord); }
-  .obs-card.p-conforme { border-color: var(--vert-bord); }
+  .legende { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .badge { padding: 3px 10px; border-radius: 3px; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; letter-spacing: 0.3px; }
+  .badge-urgent { background: var(--rouge-fond); color: var(--rouge-urgent); border: 1px solid #F7C1C1; }
+  .badge-moyen { background: var(--orange-fond); color: var(--orange-moyen); border: 1px solid #FAC775; }
+  .badge-verif { background: var(--bleu-verif-fond); color: var(--bleu-verif); border: 1px solid #B5D4F4; }
+  .badge-conforme { background: var(--vert-fond); color: var(--vert-conforme); border: 1px solid #C0DD97; }
 
-  .obs-hdr { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-bottom: 1px solid var(--gris-bord); }
-  .obs-card.p-urgent   .obs-hdr { background: var(--rouge-fond); border-bottom-color: var(--rouge-bord); }
-  .obs-card.p-moyen    .obs-hdr { background: var(--orange-fond); border-bottom-color: var(--orange-bord); }
-  .obs-card.p-verif    .obs-hdr { background: var(--bleu-clair); border-bottom-color: var(--bleu-bord); }
-  .obs-card.p-conforme .obs-hdr { background: var(--vert-fond); border-bottom-color: var(--vert-bord); }
+  .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--bleu-cesi); color: white; border: none; border-radius: 4px; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 12px; }
+  .btn-add:hover { background: #15407a; }
+  .btn-add svg { width: 14px; height: 14px; }
+  .btn-secondary { background: white; color: var(--bleu-cesi); border: 1.5px solid var(--bleu-cesi); }
+  .btn-secondary:hover { background: var(--bleu-clair); }
 
-  .obs-num { width: 30px; height: 30px; border-radius: 50%; background: var(--bleu); color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
-  .obs-card.p-urgent   .obs-num { background: var(--rouge); }
-  .obs-card.p-moyen    .obs-num { background: var(--orange); }
-  .obs-card.p-verif    .obs-num { background: var(--verif); }
-  .obs-card.p-conforme .obs-num { background: var(--vert); }
+  .obs-list { display: flex; flex-direction: column; gap: 16px; margin-top: 12px; }
+  .obs-card { border: 1px solid var(--gris-bord); border-radius: 6px; overflow: hidden; background: white; }
+  .obs-header { display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: var(--gris-fond); border-bottom: 1px solid var(--gris-bord); }
+  .obs-num { width: 26px; height: 26px; border-radius: 50%; background: var(--bleu-cesi); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; font-family: Arial, sans-serif; flex-shrink: 0; }
+  .obs-header-title { flex: 1; font-weight: bold; font-family: Arial, sans-serif; font-size: 12px; }
+  .obs-header-title input { width: 100%; border: none; outline: none; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; background: transparent; color: var(--texte); }
+  .obs-header-title input:focus { background: white; border-radius: 2px; padding: 1px 4px; }
+  .obs-priority select { border: 1px solid var(--gris-bord); border-radius: 3px; padding: 3px 6px; font-family: Arial, sans-serif; font-size: 11px; cursor: pointer; }
+  .btn-del { background: none; border: none; color: #B4B2A9; cursor: pointer; font-size: 16px; line-height: 1; padding: 0 4px; }
+  .btn-del:hover { color: var(--rouge-urgent); }
 
-  .obs-loc-input { flex: 1; border: none; outline: none; font-size: 14px; font-weight: 600; background: transparent; color: var(--texte); min-width: 0; }
-  .obs-loc-input::placeholder { font-weight: 400; color: #aaa; font-size: 13px; }
+  .obs-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .obs-field { padding: 10px 14px; border-bottom: 1px solid var(--gris-bord); border-right: 1px solid var(--gris-bord); }
+  .obs-field:nth-child(even) { border-right: none; }
+  .obs-field.full { grid-column: 1 / -1; border-right: none; }
+  .obs-field label { display: block; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; color: var(--bleu-cesi); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .obs-field textarea, .obs-field input[type=text] { width: 100%; border: 1px solid #E0DED6; border-radius: 3px; padding: 6px 8px; font-family: Arial, sans-serif; font-size: 12px; color: var(--texte); resize: vertical; min-height: 60px; background: #FAFAF8; }
+  .obs-field input[type=text] { min-height: auto; }
+  .obs-field textarea:focus, .obs-field input[type=text]:focus { outline: none; border-color: var(--bleu-cesi); background: white; }
 
-  .btn-del { background: none; border: none; color: #ccc; cursor: pointer; font-size: 22px; line-height: 1; padding: 4px; min-width: var(--touch); min-height: var(--touch); display: flex; align-items: center; justify-content: center; border-radius: 8px; }
-  .btn-del:active { background: var(--rouge-fond); color: var(--rouge); }
+  /* BOUTON BIBLIOTHÈQUE */
+  .ref-label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+  .ref-label-row label { font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; color: var(--bleu-cesi); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0; }
+  .btn-biblio {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px;
+    background: var(--bleu-cesi); color: white;
+    border: none; border-radius: 3px;
+    font-family: Arial, sans-serif; font-size: 10px; font-weight: bold;
+    cursor: pointer; letter-spacing: 0.3px;
+  }
+  .btn-biblio:hover { background: #15407a; }
 
-  /* SELECT PRIORITÉ — grand pour mobile */
-  .prio-wrap { padding: 12px 14px; border-bottom: 1px solid var(--gris-bord); }
-  .prio-wrap label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .prio-select { width: 100%; height: var(--touch); border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 0 12px; font-size: 15px; font-weight: 600; background: white; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235F5E5A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
-  .prio-select.p-urgent   { background-color: var(--rouge-fond);  color: var(--rouge);  border-color: var(--rouge-bord); }
-  .prio-select.p-moyen    { background-color: var(--orange-fond); color: var(--orange); border-color: var(--orange-bord); }
-  .prio-select.p-verif    { background-color: var(--bleu-clair);  color: var(--verif);  border-color: var(--bleu-bord); }
-  .prio-select.p-conforme { background-color: var(--vert-fond);   color: var(--vert);   border-color: var(--vert-bord); }
+  /* PANNEAU BIBLIOTHÈQUE */
+  .biblio-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .biblio-overlay.open { display: flex; }
+  .biblio-panel {
+    background: white;
+    border-radius: 8px;
+    width: 100%; max-width: 700px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column;
+    max-height: 90vh;
+    margin: auto;
+  }
+  .biblio-header {
+    background: var(--bleu-cesi); color: white;
+    padding: 14px 20px;
+    border-radius: 8px 8px 0 0;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .biblio-header h2 { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; }
+  .biblio-header p { font-family: Arial, sans-serif; font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  .biblio-close { background: none; border: none; color: white; font-size: 22px; cursor: pointer; padding: 0 4px; line-height: 1; }
+  .biblio-close:hover { opacity: 0.7; }
 
-  /* CHAMPS TEXTE */
-  .obs-field { padding: 12px 14px; border-bottom: 1px solid var(--gris-bord); }
-  .obs-field:last-child { border-bottom: none; }
-  .obs-field label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .obs-field textarea { width: 100%; border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--texte); resize: none; min-height: 90px; background: var(--gris-fond); line-height: 1.5; font-family: inherit; }
-  .obs-field textarea:focus { outline: none; border-color: var(--bleu); background: white; }
-  .obs-field textarea.small { min-height: 60px; }
+  .biblio-search {
+    padding: 12px 20px 8px;
+    border-bottom: 1px solid var(--gris-bord);
+    flex-shrink: 0;
+  }
+  .biblio-search input {
+    width: 100%; padding: 7px 10px;
+    border: 1px solid var(--gris-bord); border-radius: 4px;
+    font-family: Arial, sans-serif; font-size: 12px;
+    outline: none;
+  }
+  .biblio-search input:focus { border-color: var(--bleu-cesi); }
 
-  /* ZONE PHOTOS */
-  .photo-zone { padding: 12px 14px; border-top: 1px solid var(--gris-bord); }
-  .photo-zone > label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-  .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .photo-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 72px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px dashed; transition: all 0.15s; }
-  .photo-btn:active { transform: scale(0.97); }
-  .photo-btn-cam { color: #0F6E56; border-color: #5DCAA5; background: #E1F5EE; }
-  .photo-btn-gal { color: var(--verif); border-color: #85B7EB; background: var(--bleu-clair); }
+  .biblio-body { overflow-y: auto; padding: 12px 20px 16px; flex: 1; }
+
+  .biblio-theme { margin-bottom: 12px; }
+  .biblio-theme-title {
+    font-family: Arial, sans-serif; font-size: 11px; font-weight: bold;
+    color: var(--bleu-cesi); text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 6px 0 4px;
+    border-bottom: 1.5px solid var(--bleu-clair);
+    margin-bottom: 6px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .biblio-theme-title:hover { color: #15407a; }
+  .biblio-theme-chevron { font-size: 12px; transition: transform 0.2s; }
+  .biblio-theme-chevron.open { transform: rotate(180deg); }
+  .biblio-articles { display: flex; flex-direction: column; gap: 5px; }
+
+  .biblio-art {
+    border: 1px solid var(--gris-bord);
+    border-radius: 4px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .biblio-art:hover { border-color: var(--bleu-cesi); }
+  .biblio-art-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 10px;
+    background: var(--gris-fond);
+  }
+  .biblio-art-ref {
+    font-family: monospace; font-size: 11px; font-weight: bold;
+    color: #0C447C; background: #E6F1FB;
+    padding: 2px 7px; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+  }
+  .biblio-art-title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; color: var(--texte); flex: 1; }
+  .biblio-art-btn {
+    background: var(--bleu-cesi); color: white;
+    border: none; border-radius: 3px;
+    padding: 3px 10px; font-family: Arial, sans-serif; font-size: 10px; font-weight: bold;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  }
+  .biblio-art-btn:hover { background: #15407a; }
+  .biblio-art-text {
+    font-family: Arial, sans-serif; font-size: 11px; color: var(--texte-sec);
+    padding: 5px 10px 7px;
+    font-style: italic;
+    border-top: 1px solid var(--gris-bord);
+    display: none;
+    line-height: 1.5;
+  }
+  .biblio-art:hover .biblio-art-text { display: block; }
+
+  .biblio-empty { font-family: Arial, sans-serif; font-size: 12px; color: var(--texte-sec); text-align: center; padding: 20px; font-style: italic; }
+
+  /* PHOTO ZONE */
+  .photo-zone { padding: 10px 14px; border-bottom: 1px solid var(--gris-bord); grid-column: 1 / -1; }
+  .photo-zone label { display: block; font-size: 10px; font-weight: bold; font-family: Arial, sans-serif; color: var(--bleu-cesi); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .photo-grid { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+  .photo-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2px; }
+  .photo-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; width: 130px; height: 80px; border-radius: 8px; border: 2px dashed var(--gris-bord); background: var(--gris-fond); color: var(--texte-sec); font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; cursor: pointer; flex-shrink: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .photo-btn:hover, .photo-btn:active { border-color: var(--bleu-cesi); color: var(--bleu-cesi); background: var(--bleu-clair); }
   .photo-btn svg { width: 28px; height: 28px; }
-  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .photo-thumb { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--gris-bord); }
+  .photo-btn.btn-camera { border-color: #9FE1CB; color: #0F6E56; background: #E1F5EE; }
+  .photo-btn.btn-camera:hover, .photo-btn.btn-camera:active { border-color: #0F6E56; background: #9FE1CB; }
+  .photo-btn.btn-gallery { border-color: #B5D4F4; color: #185FA5; background: #E6F1FB; }
+  .photo-btn.btn-gallery:hover, .photo-btn.btn-gallery:active { border-color: #185FA5; background: #B5D4F4; }
+  .photo-thumb { position: relative; width: 150px; height: 120px; border-radius: 6px; overflow: hidden; border: 1px solid var(--gris-bord); flex-shrink: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .photo-del { position: absolute; top: 5px; right: 5px; width: 28px; height: 28px; background: rgba(163,45,45,0.88); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-  .photo-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(27,79,138,0.75); }
-  .photo-caption input { width: 100%; background: none; border: none; outline: none; color: white; font-size: 11px; padding: 4px 6px; text-align: center; font-family: inherit; }
-  .photo-caption input::placeholder { color: rgba(255,255,255,0.55); }
+  .photo-thumb .photo-del { position: absolute; top: 5px; right: 5px; width: 28px; height: 28px; background: rgba(163,45,45,0.88); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; font-weight: bold; -webkit-tap-highlight-color: transparent; }
 
-  /* LIGHTBOX */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-  .lightbox.open { display: flex; }
-  .lightbox img { max-width: 100%; max-height: 80vh; border-radius: 8px; }
-  .lightbox-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: white; font-size: 24px; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .lightbox-cap { color: white; font-size: 13px; margin-top: 12px; opacity: 0.75; text-align: center; }
+  /* SYNTHESE */
+  .synthese-box { border: 1px solid var(--gris-bord); border-radius: 4px; overflow: hidden; }
+  .synthese-urgents { background: var(--rouge-fond); border-bottom: 1px solid #F7C1C1; padding: 12px 16px; }
+  .synthese-urgents h4 { font-family: Arial, sans-serif; font-size: 12px; color: var(--rouge-urgent); font-weight: bold; margin-bottom: 4px; }
+  .synthese-urgents p { font-family: Arial, sans-serif; font-size: 12px; color: var(--rouge-urgent); }
+  .synthese-body { padding: 12px 16px; }
+  .synthese-body textarea { width: 100%; border: 1px solid #E0DED6; border-radius: 3px; padding: 6px 8px; font-family: Arial, sans-serif; font-size: 12px; resize: vertical; min-height: 60px; background: #FAFAF8; }
+  .synthese-body textarea:focus { outline: none; border-color: var(--bleu-cesi); background: white; }
 
-  /* SYNTHÈSE */
-  .synthese-urgents { background: var(--rouge-fond); border: 1.5px solid var(--rouge-bord); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
-  .synthese-urgents h4 { font-size: 13px; font-weight: 700; color: var(--rouge); margin-bottom: 4px; }
-  #synthese-liste { font-size: 13px; color: var(--rouge); font-style: italic; line-height: 1.5; }
-  .synthese-plan label { display: block; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .synthese-plan textarea { width: 100%; border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 10px 12px; font-size: 14px; color: var(--texte); resize: none; min-height: 80px; background: var(--gris-fond); line-height: 1.5; font-family: inherit; }
-  .synthese-plan textarea:focus { outline: none; border-color: var(--bleu); background: white; }
+  .signature { padding: 20px 32px; background: var(--gris-fond); display: flex; justify-content: space-between; align-items: flex-end; }
+  .sig-left { font-family: Arial, sans-serif; font-size: 11px; color: var(--texte-sec); }
+  .sig-right { text-align: right; font-family: Arial, sans-serif; font-size: 11px; }
+  .sig-right strong { font-size: 13px; display: block; color: var(--bleu-cesi); }
 
-  /* BTN AJOUTER */
-  .btn-add { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: var(--touch); background: var(--bleu); color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; margin: 10px 0; }
-  .btn-add:active { background: #15407a; }
-  .btn-add svg { width: 20px; height: 20px; }
-  .btn-add-wrap { padding: 0 10px; }
+  .toolbar { position: sticky; top: 0; z-index: 200; background: white; border-bottom: 2px solid var(--bleu-cesi); padding: 10px 32px; display: flex; gap: 10px; align-items: center; }
+  .toolbar-title { font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; color: var(--bleu-cesi); flex: 1; }
+  .btn-print { background: #444; color: white; border: none; border-radius: 4px; padding: 7px 14px; font-family: Arial, sans-serif; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .btn-print:hover { background: #222; }
 
-  /* SIGNATURE */
-  .sig-block { background: white; margin: 0 10px 16px; border-radius: var(--radius); padding: 14px; }
-  .sig-date-row label { font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
-  .sig-date-row input { border: 1.5px solid var(--gris-bord); border-radius: 8px; padding: 8px 12px; font-size: 14px; width: 100%; outline: none; font-family: inherit; }
-  .sig-date-row input:focus { border-color: var(--bleu); }
-  .sig-info { margin-top: 12px; font-size: 13px; color: var(--texte-sec); line-height: 1.5; border-top: 1px solid var(--gris-bord); padding-top: 10px; }
-  .sig-info strong { font-size: 14px; display: block; color: var(--bleu); margin-bottom: 2px; }
-
-  .hidden-file { display: none; }
-
-  /* ÉCRAN DE VERROUILLAGE */
-  .lock-overlay { position: fixed; inset: 0; background: var(--bleu); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
-  .lock-overlay.hidden { display: none; }
-  .lock-logo { font-size: 32px; font-weight: 900; color: white; letter-spacing: -1px; margin-bottom: 4px; }
-  .lock-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8); margin-bottom: 40px; text-align: center; line-height: 1.4; }
-  .lock-icon { font-size: 48px; margin-bottom: 20px; }
-  .lock-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; align-self: flex-start; width: 100%; max-width: 300px; }
-  .lock-input { width: 100%; max-width: 300px; height: 52px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.12); color: white; font-size: 18px; font-family: inherit; padding: 0 16px; outline: none; letter-spacing: 2px; text-align: center; }
-  .lock-input:focus { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.18); }
-  .lock-input::placeholder { color: rgba(255,255,255,0.35); letter-spacing: 0; font-size: 14px; }
-  .lock-btn { margin-top: 14px; width: 100%; max-width: 300px; height: 52px; border-radius: 10px; border: none; background: white; color: var(--bleu); font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  .lock-btn:active { background: #E6F1FB; }
-  .lock-error { margin-top: 12px; font-size: 13px; color: #FFB3B3; min-height: 20px; text-align: center; }
-  .lock-copyright { position: absolute; bottom: 20px; font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; }
-
-  /* BANDEAU ÉDITION VERROUILLÉE */
-  .edit-lock-bar { background: var(--orange-fond); border-bottom: 1px solid var(--orange-bord); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .edit-lock-bar.hidden { display: none; }
-  .edit-lock-text { font-size: 13px; color: var(--orange); font-weight: 600; }
-  .edit-unlock-btn { background: var(--orange); color: white; border: none; border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; min-height: 40px; font-family: inherit; }
-  .edit-unlock-btn:active { filter: brightness(0.9); }
-
-  /* MODAL DÉVERROUILLAGE ÉDITION */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 24px; }
-  .modal-overlay.hidden { display: none; }
-  .modal-box { background: white; border-radius: 16px; padding: 24px 20px; width: 100%; max-width: 320px; }
-  .modal-title { font-size: 16px; font-weight: 700; color: var(--bleu); margin-bottom: 6px; }
-  .modal-sub { font-size: 13px; color: var(--texte-sec); margin-bottom: 18px; }
-  .modal-input { width: 100%; height: 48px; border: 1.5px solid var(--gris-bord); border-radius: 8px; font-size: 16px; font-family: inherit; padding: 0 14px; outline: none; letter-spacing: 2px; text-align: center; }
-  .modal-input:focus { border-color: var(--bleu); }
-  .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
-  .modal-cancel { background: var(--gris-fond); color: var(--texte-sec); border: none; border-radius: 8px; height: 44px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
-  .modal-confirm { background: var(--bleu); color: white; border: none; border-radius: 8px; height: 44px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  .modal-error { font-size: 12px; color: var(--rouge); margin-top: 8px; min-height: 18px; text-align: center; }
-
-  /* PIED COPYRIGHT */
-  .copyright-bar { background: var(--bleu); color: rgba(255,255,255,0.6); text-align: center; padding: 12px 16px; font-size: 11px; line-height: 1.5; }
-  .copyright-bar strong { color: rgba(255,255,255,0.9); }
-
-  /* PRINT */
   @media print {
-    .toolbar, .btn-add, .btn-add-wrap, .btn-del, .photo-btn, .photo-del, .hidden-file, #save-status, .prio-select { display: none !important; }
-    body { background: white; }
-    .section, .obs-card, .sig-block { margin: 0 0 8px; border-radius: 0; border: 1px solid #D3D1C7; }
-    .obs-list { margin: 0; }
-    .obs-card { page-break-inside: avoid; }
-    input, textarea { border: none !important; background: transparent !important; resize: none !important; overflow: visible !important; min-height: 0 !important; font-size: 11px !important; }
-    .header { background: #1B4F8A !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .obs-card.p-urgent   { border-color: #F7C1C1 !important; }
-    .obs-card.p-urgent .obs-hdr  { background: #FCEBEB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .obs-card.p-moyen .obs-hdr   { background: #FAEEDA !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .obs-card.p-verif .obs-hdr   { background: #E6F1FB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .obs-card.p-conforme .obs-hdr{ background: #EAF3DE !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .synthese-urgents { background: #FCEBEB !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .photo-thumb { width: 120px !important; height: 90px !important; }
-    .photo-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .toolbar, .btn-add, .btn-del, .btn-secondary, .btn-print, .obs-priority, .photo-btns, .photo-btn, .photo-del, .hidden-input, #save-status, .btn-biblio, .biblio-overlay { display: none !important; }
+    body { background: white; font-size: 11px; }
+    .page { box-shadow: none; max-width: 100%; }
+    input, textarea, select { border: none !important; background: transparent !important; outline: none !important; resize: none !important; overflow: visible !important; height: auto !important; min-height: 0 !important; padding: 0 !important; font-size: 11px !important; color: #2C2C2A !important; width: 100% !important; }
+    input::placeholder, textarea::placeholder { color: transparent !important; }
+    .info-value { overflow: visible; white-space: normal; word-break: break-word; }
+    .info-grid { page-break-inside: avoid; }
+    .obs-card { page-break-inside: avoid; border: 1px solid #D3D1C7 !important; margin-bottom: 12px; }
+    .obs-header { background: #F7F7F5 !important; }
+    .obs-field textarea { min-height: 0; height: auto; }
+    .photo-thumb { width: 200px !important; height: 160px !important; }
+    .photo-zone { page-break-inside: avoid; }
+    .photo-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .photo-grid:empty + * { display: none; }
+    .synthese-box { page-break-inside: avoid; }
+    .signature { page-break-inside: avoid; }
+    .header { background: #1B4F8A !important; color: white !important; }
+    .header input { color: white !important; }
+    .badge-urgent { background: #FCEBEB !important; color: #A32D2D !important; }
+    .badge-moyen { background: #FAEEDA !important; color: #854F0B !important; }
+    .badge-verif { background: #E6F1FB !important; color: #185FA5 !important; }
+    .badge-conforme { background: #EAF3DE !important; color: #3B6D11 !important; }
+    .obs-field label { color: #1B4F8A !important; }
+    .info-label { background: #E6F1FB !important; color: #1B4F8A !important; }
+    .section-title { color: #1B4F8A !important; border-bottom-color: #1B4F8A !important; }
+    .synthese-urgents { background: #FCEBEB !important; }
+    .synthese-urgents h4, .synthese-urgents p { color: #A32D2D !important; }
+    .ref-label-row label { color: #1B4F8A !important; }
   }
+
+  select.p-urgent { background: var(--rouge-fond); color: var(--rouge-urgent); border-color: #F7C1C1 !important; }
+  select.p-moyen { background: var(--orange-fond); color: var(--orange-moyen); border-color: #FAC775 !important; }
+  select.p-verif { background: var(--bleu-verif-fond); color: var(--bleu-verif); border-color: #B5D4F4 !important; }
+  select.p-conforme { background: var(--vert-fond); color: var(--vert-conforme); border-color: #C0DD97 !important; }
+  .hidden-input { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ÉCRAN DE VERROUILLAGE À L'OUVERTURE -->
-<div class="lock-overlay" id="lock-overlay">
-  <div class="lock-icon">🔒</div>
-  <div class="lock-logo">CESI</div>
-  <div class="lock-title">Rapport de Visite des Lieux de Travail<br>SEPP – Outil réservé à un usage professionnel</div>
-  <div class="lock-label">Mot de passe</div>
-  <input class="lock-input" id="lock-input" type="password" placeholder="Entrez le mot de passe…" autocomplete="off" onkeydown="if(event.key==='Enter')checkLock()">
-  <button class="lock-btn" onclick="checkLock()">Accéder au rapport</button>
-  <div class="lock-error" id="lock-error"></div>
-  <div class="lock-copyright">© 2026 Faïçal DAHMANI – Tous droits réservés</div>
-</div>
-
-<!-- MODAL DÉVERROUILLAGE ÉDITION -->
-<div class="modal-overlay hidden" id="edit-modal">
-  <div class="modal-box">
-    <div class="modal-title">🔓 Déverrouiller l'édition</div>
-    <div class="modal-sub">Entrez le mot de passe pour modifier ce rapport.</div>
-    <input class="modal-input" id="modal-input" type="password" placeholder="Mot de passe…" autocomplete="off" onkeydown="if(event.key==='Enter')checkEdit()">
-    <div class="modal-error" id="modal-error"></div>
-    <div class="modal-btns">
-      <button class="modal-cancel" onclick="closeEditModal()">Annuler</button>
-      <button class="modal-confirm" onclick="checkEdit()">Déverrouiller</button>
+<!-- PANNEAU BIBLIOTHÈQUE (overlay) -->
+<div class="biblio-overlay" id="biblio-overlay" onclick="closeBiblioIfOutside(event)">
+  <div class="biblio-panel">
+    <div class="biblio-header">
+      <div>
+        <h2>📚 Bibliothèque CBET — Formulations validées</h2>
+        <p>Cliquez sur « Insérer » pour coller l'article dans le champ référence légale</p>
+      </div>
+      <button class="biblio-close" onclick="closeBiblio()">✕</button>
     </div>
+    <div class="biblio-search">
+      <input type="text" id="biblio-search" placeholder="Rechercher un article, un mot-clé (ex: extincteur, écran, biologique…)" oninput="renderBiblio()">
+    </div>
+    <div class="biblio-body" id="biblio-body"></div>
   </div>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lb-img" src="" alt="">
-  <div class="lightbox-cap" id="lb-cap"></div>
-</div>
-
-<!-- TOOLBAR -->
 <div class="toolbar">
-  <button class="tbtn tbtn-green" onclick="saveHTMLFile()">💾 Sauvegarder</button>
-  <button class="tbtn tbtn-blue"  onclick="exportWord()">📄 Word</button>
-  <button class="tbtn tbtn-dark"  onclick="window.print()">🖨 PDF</button>
-  <button class="tbtn tbtn-grey"  onclick="clearSave()">🗑</button>
-  <span id="save-status" style="margin-left:4px;"></span>
+  <span class="toolbar-title">📋 Rapport VLT — CESI SEPP</span>
+  <span id="save-status" style="font-family:Arial,sans-serif;font-size:11px;color:#3B6D11;opacity:0.4;transition:opacity 0.5s;"></span>
+  <button class="btn-print" style="background:#2E7D32;" onclick="saveHTMLFile()" title="Sauvegarder une copie HTML de votre rapport">💾 Sauvegarder</button>
+  <button class="btn-print" style="background:#1B4F8A;" onclick="exportWord()">📄 Word</button>
+  <button class="btn-print" onclick="window.print()">🖨 Imprimer / PDF</button>
+  <button class="btn-print" style="background:#888;" onclick="clearSave()" title="Effacer et recommencer">🗑</button>
 </div>
 
-<!-- BANDEAU ÉDITION VERROUILLÉE -->
-<div class="edit-lock-bar" id="edit-lock-bar">
-  <span class="edit-lock-text">🔒 Mode lecture — édition verrouillée</span>
-  <button class="edit-unlock-btn" onclick="openEditModal()">Déverrouiller</button>
-</div>
+<div class="page">
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-top">
-    <div>
+  <div class="header">
+    <div class="header-left">
       <div class="cesi-logo">CESI</div>
-      <h1>Rapport de Visite des Lieux de Travail</h1>
+      <h1>RAPPORT DE VISITE DES LIEUX DE TRAVAIL</h1>
+      <p>Conformément aux art. II.3-53 et II.3-55 CBET — Loi du 4 août 1996</p>
+      <p style="margin-top:4px;">Service Externe de Prévention et de Protection au Travail (SEPP)</p>
+    </div>
+    <div class="header-right">
+      <div class="ref">Réf. <input id="ref" type="text" value="" placeholder="ex: 131240.6" style="font-weight:bold;font-size:13px;color:white;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.5);width:90px;outline:none;text-align:right;"></div>
+      <div style="margin-top:6px;">Date : <input id="date-rapport" type="text" value="" placeholder="jj/mm/aaaa" style="color:white;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.5);width:85px;outline:none;font-size:11px;text-align:center;"></div>
     </div>
   </div>
-  <div class="header-fields">
-    <div class="h-field">
-      <label>Référence</label>
-      <input id="inp-ref" type="text" placeholder="ex: 131240.6" inputmode="text">
-    </div>
-    <div class="h-field">
-      <label>Date rapport</label>
-      <input id="inp-date" type="text" placeholder="jj/mm/aaaa" inputmode="text">
-    </div>
-  </div>
-</div>
 
-<!-- INFOS GÉNÉRALES -->
-<div class="section" style="margin-top:10px;">
-  <div class="sec-header">Informations générales</div>
-  <div class="sec-body">
-    <div class="info-rows">
-      <div class="info-row"><label>Entreprise / Organisation</label><input type="text" placeholder="Nom de l'entreprise"></div>
-      <div class="info-row"><label>Adresse visitée</label><input type="text" placeholder="Rue, numéro, code postal, commune"></div>
-      <div class="info-row"><label>Siège social</label><input type="text" placeholder="Si différent de l'adresse visitée"></div>
-      <div class="info-row"><label>Code NACE</label><input type="text" placeholder="ex: 86.901 – Laboratoires médicaux" inputmode="text"></div>
-      <div class="info-row"><label>Date de la visite</label><input type="text" placeholder="ex: Jeudi 16 avril 2026"></div>
-      <div class="info-row"><label>Type de visite</label><input type="text" value="Visite d'entreprise périodique (Art. II.3-53 et II.3-55 CBET)"></div>
-      <div class="info-row"><label>Médecin du travail</label><input type="text" placeholder="Dr Prénom NOM – N° projet :"></div>
-      <div class="info-row"><label>Conseiller en prévention</label><input type="text" value="Faïçal DAHMANI – Conseiller en prévention niveau 1 – CESI SEPP"></div>
-      <div class="info-row"><label>Personne(s) accompagnante(s)</label><input type="text" placeholder="Nom, prénom, fonction"></div>
+  <div class="section">
+    <div class="section-title">Informations générales</div>
+    <div class="info-grid">
+      <div class="info-label">Entreprise / Organisation</div>
+      <div class="info-value"><input type="text" placeholder="Nom de l'entreprise ou organisation"></div>
+      <div class="info-label">Adresse visitée</div>
+      <div class="info-value"><input type="text" placeholder="Rue, numéro, code postal, commune"></div>
+      <div class="info-label">Siège social</div>
+      <div class="info-value"><input type="text" placeholder="Adresse du siège (si différent)"></div>
+      <div class="info-label">Code NACE</div>
+      <div class="info-value"><input type="text" placeholder="ex: 84.114 – Services sociaux"></div>
+      <div class="info-label">Date de la visite</div>
+      <div class="info-value"><input type="text" placeholder="ex: Jeudi 16 avril 2026"></div>
+      <div class="info-label">Type de visite</div>
+      <div class="info-value"><input type="text" value="Visite d'entreprise périodique (Art. II.3-53 et II.3-55 CBET)"></div>
+      <div class="info-label">Médecin du travail</div>
+      <div class="info-value"><input type="text" placeholder="Dr Prénom NOM – N° projet : "></div>
+      <div class="info-label">Conseiller en prévention</div>
+      <div class="info-value"><input type="text" value="Faïçal DAHMANI – Conseiller en prévention niveau 1 – CESI SEPP"></div>
+      <div class="info-label">Personne(s) accompagnante(s)</div>
+      <div class="info-value" style="grid-column: span 1;"><input type="text" placeholder="Nom, prénom, fonction"></div>
     </div>
   </div>
-</div>
 
-<!-- LÉGENDE -->
-<div class="section">
-  <div class="sec-header">Niveaux de priorité</div>
-  <div class="sec-body">
+  <div class="section">
+    <div class="section-title">Légende des niveaux de priorité</div>
     <div class="legende">
-      <div class="badge badge-urgent"><div class="badge-dot dot-urgent"></div>URGENT — Action immédiate requise</div>
-      <div class="badge badge-moyen"><div class="badge-dot dot-moyen"></div>MOYEN TERME — 3 à 6 mois</div>
-      <div class="badge badge-verif"><div class="badge-dot dot-verif"></div>À VÉRIFIER — Expert agréé</div>
-      <div class="badge badge-conforme"><div class="badge-dot dot-conforme"></div>CONFORME — Maintenir les bonnes pratiques</div>
+      <span class="badge badge-urgent">🔴 URGENT — Action immédiate requise</span>
+      <span class="badge badge-moyen">🟠 MOYEN TERME — À corriger dans les 3 à 6 mois</span>
+      <span class="badge badge-verif">🔵 À VÉRIFIER — Faire contrôler par un expert agréé</span>
+      <span class="badge badge-conforme">🟢 CONFORME — Maintenir les bonnes pratiques</span>
     </div>
   </div>
-</div>
 
-<!-- TITRE OBSERVATIONS -->
-<div style="padding: 14px 10px 6px; font-size: 11px; font-weight: 700; color: var(--bleu); text-transform: uppercase; letter-spacing: 1.2px;">
-  Constatations et recommandations
-</div>
+  <div class="section">
+    <div class="section-title">Constatations et recommandations</div>
+    <div class="obs-list" id="obs-list"></div>
+    <button class="btn-add" onclick="addObs()" style="margin-top:16px;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      Ajouter une observation
+    </button>
+  </div>
 
-<!-- LISTE OBSERVATIONS -->
-<div class="obs-list" id="obs-list"></div>
-
-<!-- BOUTON AJOUTER -->
-<div class="btn-add-wrap">
-  <button class="btn-add" onclick="addObs()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-    Ajouter une observation
-  </button>
-</div>
-
-<!-- SYNTHÈSE -->
-<div class="section">
-  <div class="sec-header">Synthèse et suites à donner</div>
-  <div class="sec-body">
-    <div class="synthese-urgents">
-      <h4 id="synth-titre">Points urgents à traiter immédiatement :</h4>
-      <div id="synthese-liste" style="font-style:italic;">— Aucun point urgent pour l'instant —</div>
-    </div>
-    <div class="synthese-plan">
-      <label>Intégration dans le plan de prévention</label>
-      <textarea rows="4">L'ensemble des recommandations doit être intégré dans le plan annuel d'action (art. II.1-7 CBET) et pour les actions structurelles dans le plan global de prévention à 5 ans (art. II.1-6 CBET). Ce rapport est remis à l'employeur conformément à l'art. II.3-53 §3 CBET.</textarea>
+  <div class="section">
+    <div class="section-title">Synthèse et suites à donner</div>
+    <div class="synthese-box">
+      <div class="synthese-urgents">
+        <h4 id="synthese-urgents-titre">Points urgents à traiter immédiatement :</h4>
+        <p id="synthese-urgents-liste" style="font-style:italic;">— Aucun point urgent pour l'instant —</p>
+      </div>
+      <div class="synthese-body">
+        <label style="font-size:10px;font-weight:bold;font-family:Arial,sans-serif;color:var(--bleu-cesi);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Intégration dans le plan de prévention</label>
+        <textarea rows="4">L'ensemble des recommandations doit être intégré dans le plan annuel d'action (art. II.1-7 CBET) et pour les actions structurelles dans le plan global de prévention à 5 ans (art. II.1-6 CBET). Ce rapport est remis à l'employeur conformément à l'art. II.3-53 §3 CBET.</textarea>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- SIGNATURE -->
-<div class="sig-block">
-  <div class="sig-date-row">
-    <label>Date de signature</label>
-    <input id="inp-date-sign" type="text" placeholder="jj/mm/aaaa">
+  <div class="signature">
+    <div class="sig-left">
+      <div>Fait à Bruxelles, le <input id="date-sign" type="text" value="" style="border:none;border-bottom:1px solid var(--gris-bord);background:transparent;font-family:Arial,sans-serif;font-size:11px;color:var(--texte-sec);outline:none;width:120px;"></div>
+      <div style="margin-top:10px;font-size:10px;">CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles</div>
+      <div style="font-size:10px;">T: 02 771 00 25 | www.cesi.be | faical.dahmani@cesi.be</div>
+    </div>
+    <div class="sig-right">
+      <strong>Faïçal DAHMANI</strong>
+      Conseiller en prévention niveau 1<br>
+      Service Externe de Prévention et de Protection au Travail – CESI<br>
+      faical.dahmani@cesi.be | 02 771 00 25
+    </div>
   </div>
-  <div class="sig-info">
-    <strong>Faïçal DAHMANI</strong>
-    Conseiller en prévention niveau 1<br>
-    Service Externe de Prévention et de Protection au Travail – CESI<br>
-    faical.dahmani@cesi.be | 02 771 00 25<br>
-    CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles
-  </div>
+
 </div>
 
 <script>
-let obsCount = 0;
-const SAVE_KEY = 'vlt_mobile_v1';
-let saveTimer = null;
+// =====================================================================
+// BIBLIOTHÈQUE CBET — FORMULATIONS VALIDÉES
+// =====================================================================
+const BIBLIO = [
+  // INCENDIE & ÉVACUATION
+  { theme: "Incendie & évacuation", ref: "Art. III.3-17 CBET", title: "Emplacement et accès aux extincteurs",
+    text: "Art. III.3-17 CBET (Livre III, Titre 3) : les équipements non automatiques de protection contre l'incendie doivent être placés à des endroits visibles ou clairement signalés, être d'accès et de manipulation faciles, et l'objectif pour lequel ils doivent être utilisés doit être clairement indiqué." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-18 CBET", title: "Signalisation des équipements incendie",
+    text: "Art. III.3-18 CBET (Livre III, Titre 3) : la signalisation des équipements de protection contre l'incendie doit être apposée aux endroits appropriés, conforme au titre 6 du Livre III, et conserver ses propriétés dans le temps. Les signaux d'alerte et d'alarme doivent être perceptibles par toutes les personnes concernées et ne peuvent être confondus entre eux ni avec d'autres signaux." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-22 §1 et §3 CBET", title: "Contrôle annuel des équipements incendie",
+    text: "Art. III.3-22 §1 et §3 CBET (Livre III, Titre 3) : les équipements de protection contre l'incendie doivent être contrôlés au moins une fois par an et maintenus en bon état d'usage, conformément aux prescriptions du fabricant ou de l'installateur. Les dates des contrôles et entretiens et les constatations qui y sont faites doivent être conservées et tenues à la disposition du Comité et des fonctionnaires chargés de la surveillance." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-20 §1 et §2 CBET", title: "Compartimentage — portes coupe-feu",
+    text: "Art. III.3-20 §1 et §2 CBET (Livre III, Titre 3) : l'employeur veille à ce que le bâtiment soit conçu et construit de manière à limiter l'apparition et la propagation du feu et de la fumée, conformément aux art. 52.5.4 et 52.5.5 du RGPT relatifs aux éléments de compartimentage. Toute porte coupe-feu maintenue ouverte compromet cette obligation." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-4 2° et 3° CBET", title: "Évacuation rapide et sans danger",
+    text: "Art. III.3-4 2° et 3° CBET (Livre III, Titre 3) : l'employeur prend les mesures de prévention matérielles et organisationnelles nécessaires pour assurer la sécurité et, si nécessaire, l'évacuation rapide des travailleurs et de toutes les personnes présentes sur le lieu de travail, sans les mettre en danger, et pour combattre rapidement et efficacement tout début d'incendie afin d'en éviter la propagation." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-11 §2 et §3 CBET", title: "Voies d'évacuation dégagées + éclairage de sécurité",
+    text: "Art. III.3-11 §2 CBET (Livre III, Titre 3) : les voies d'évacuation, les sorties et sorties de secours et les chemins qui donnent accès aux voies d'évacuation doivent être dégagés et ne peuvent pas être obstrués par des objets de façon à ce qu'ils puissent être utilisés à tout moment sans entrave. Art. III.3-11 §3 CBET : les voies d'évacuation, les sorties et sorties de secours doivent être équipées d'un éclairage de sécurité et d'une signalisation appropriée, apposée aux endroits appropriés et conservant ses propriétés dans le temps, conformément au titre 6 du Livre III et à l'art. 52.5.11 du RGPT." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-12 CBET", title: "Portes de secours — sens d'ouverture",
+    text: "Art. III.3-12 CBET (Livre III, Titre 3) : les portes de secours doivent s'ouvrir dans le sens de l'évacuation. Elles ne peuvent pas être coulissantes ou à tambour. Elles doivent pouvoir être ouvertes facilement et immédiatement par toute personne qui veut en faire usage en cas d'urgence et ne peuvent pas être fermées à clé." },
+  { theme: "Incendie & évacuation", ref: "Art. III.3-13 CBET", title: "Plans d'évacuation affichés",
+    text: "Art. III.3-13 CBET (Livre III, Titre 3) : l'employeur affiche à l'entrée du bâtiment et par niveau un plan d'évacuation, conçu en collaboration avec le conseiller en prévention sécurité du travail et soumis à l'avis du Comité. Ce plan comprend notamment la division et la destination des locaux, la localisation des limites des compartiments, l'emplacement des locaux présentant un danger accru d'incendie, l'emplacement des sorties et sorties de secours, les lieux de rassemblement après évacuation et le tracé des voies d'évacuation." },
 
-function prioClass(v) {
-  return v==='URGENT'?'p-urgent':v==='MOYEN TERME'?'p-moyen':v==='À VÉRIFIER'?'p-verif':v==='CONFORME'?'p-conforme':'';
+  // INSTALLATIONS ÉLECTRIQUES
+  { theme: "Installations électriques", ref: "Art. III.2-5 CBET", title: "Installation électrique sans danger",
+    text: "Art. III.2-5 CBET (Livre III, Titre 2) : l'employeur démontre que l'installation électrique est réalisée, exploitée et maintenue en bon état de façon à protéger les travailleurs efficacement contre les risques liés à l'électricité, notamment les risques de surchauffe, d'incendie et d'explosion visés à l'annexe III.2-1." },
+  { theme: "Installations électriques", ref: "Art. III.2-3 CBET", title: "Analyse des risques électriques",
+    text: "Art. III.2-3 CBET (Livre III, Titre 2) : l'employeur effectue une analyse des risques de chaque installation électrique qu'il détient, portant notamment sur les risques de chocs électriques par contact direct ou indirect, les risques de surchauffe, de brûlures, d'incendie et d'explosion causés par l'équipement électrique, ainsi que les risques dus aux surintensités." },
+  { theme: "Installations électriques", ref: "Art. III.2-18 CBET", title: "Accès réservé BA4/BA5",
+    text: "Art. III.2-18 CBET (Livre III, Titre 2) : l'employeur prend les mesures nécessaires pour que seuls les travailleurs disposant de la compétence nécessaire soient chargés de l'utilisation, de l'exploitation et des travaux aux installations électriques ou aux parties de ces installations susceptibles de présenter un risque à caractère électrique. La compétence BA4 ou BA5, accordée conformément à l'art. 47 du RGIE, est requise pour l'accès aux parties réservées par le RGIE." },
+
+  // LIEUX DE TRAVAIL
+  { theme: "Lieux de travail", ref: "Art. III.1-21 CBET", title: "Voies de circulation sûres",
+    text: "Art. III.1-21 CBET (Livre III, Titre 1) : les voies de circulation, y compris les escaliers et les échelles fixes, sont situées et calculées de telle façon que des piétons ou des véhicules puissent les utiliser facilement, en toute sécurité et conformément à leur affectation, et que les travailleurs occupés à proximité ne courent aucun risque." },
+  { theme: "Lieux de travail", ref: "Art. III.1-6 CBET", title: "Superficie et volume des locaux",
+    text: "Art. III.1-6 CBET (Livre III, Titre 1) : les locaux de travail doivent avoir une superficie, une hauteur et un volume d'air permettant aux travailleurs d'exécuter leur travail sans risque pour leur bien-être. Les prescriptions minimales sont : une hauteur de 2,5 m, un espace réel de 10 m³ par travailleur et une superficie libre de 2 m² par travailleur." },
+  { theme: "Lieux de travail", ref: "Art. III.1-8 CBET", title: "Planchers — stabilité et non-glissant",
+    text: "Art. III.1-8 CBET (Livre III, Titre 1) : les planchers des locaux et des espaces à ciel ouvert sont exempts de bosses, de trous ou de plans inclinés dangereux. Ils sont fixes, stables et non glissants." },
+  { theme: "Lieux de travail", ref: "Art. III.1-9 CBET", title: "Entretien, nettoyage et propreté des locaux",
+    text: "Art. III.1-9 CBET (Livre III, Titre 1) : l'employeur veille à ce que les lieux de travail soient nettoyés et entretenus afin de prévenir tout risque pour le bien-être des travailleurs. Il détermine les méthodes, équipements, produits et fréquences de nettoyage appropriés. Les défectuosités constatées susceptibles d'affecter la sécurité et la santé des travailleurs doivent être éliminées le plus rapidement possible. L'employeur veille à ce que les déchets soient régulièrement et de façon sûre collectés et enlevés du lieu de travail." },
+  { theme: "Lieux de travail", ref: "Art. III.1-29 CBET", title: "Stabilité du stockage — chute d'objets",
+    text: "Art. III.1-29 CBET (Livre III, Titre 1) : le dépôt de marchandises, de matériaux et d'autres objets est réalisé de façon à ce que leur stabilité soit assurée et qu'ils ne puissent pas tomber." },
+  { theme: "Lieux de travail", ref: "Art. III.1-4 CBET", title: "Structure et solidité du bâtiment",
+    text: "Art. III.1-4 CBET (Livre III, Titre 1) : les bâtiments abritant des lieux de travail doivent posséder une structure, une stabilité et une solidité appropriées au type d'utilisation." },
+  { theme: "Lieux de travail", ref: "Art. III.1-7 CBET", title: "Superficie libre du poste de travail",
+    text: "Art. III.1-7 CBET (Livre III, Titre 1) : les dimensions de la superficie libre non meublée du poste de travail sont calculées de telle façon que les travailleurs disposent de suffisamment de liberté de mouvements pour leurs activités." },
+
+  // PREMIERS SECOURS
+  { theme: "Premiers secours", ref: "Art. I.5-4 CBET", title: "Boîte de secours conforme",
+    text: "Art. I.5-4 CBET (Livre I, Titre 5) : les moyens élémentaires de premiers secours comprennent le matériel de base et une boîte de secours dont le contenu est déterminé sur avis du conseiller en prévention-médecin du travail et du Comité. L'employeur vérifie régulièrement si ces moyens sont effectivement présents." },
+
+  // ERGONOMIE & ÉCRANS
+  { theme: "Ergonomie & écrans", ref: "Art. VIII.1-2 et VIII.1-3 §1 CBET", title: "Siège de travail — exigences générales",
+    text: "Art. VIII.1-2 CBET (Livre VIII, Titre 1) : pour les travailleurs dont les activités sont compatibles avec la position assise, l'employeur met à disposition un siège de travail. Art. VIII.1-3 §1 CBET : les sièges de travail répondent aux exigences de confort et de santé et font l'objet d'une analyse des risques préalablement à leur choix, pour garantir le bien-être des travailleurs lors de leur utilisation." },
+  { theme: "Ergonomie & écrans", ref: "Art. VIII.2-3 §1 CBET", title: "Analyse des risques — postes à écran",
+    text: "Art. VIII.2-3 §1 CBET (Livre VIII, Titre 2) : l'employeur réalise au moins tous les cinq ans une analyse de risque au niveau de chaque groupe de postes de travail à écran de visualisation et au niveau de l'individu, afin d'évaluer les risques pour le système visuel et les problèmes de charge physique et mentale, et prend les mesures appropriées pour prévenir ou remédier aux risques constatés." },
+  { theme: "Ergonomie & écrans", ref: "Art. VIII.2-6 CBET + Annexe VIII.2-1", title: "Prescriptions minimales postes à écran",
+    text: "Art. VIII.2-6 CBET + Annexe VIII.2-1 (Livre VIII, Titre 2) : l'employeur prend les mesures appropriées afin que les postes de travail à écran répondent aux prescriptions minimales relatives à l'équipement et à l'environnement, notamment : écran orientable et exempt de reflets, clavier inclinable et dissocié de l'écran, surface de travail de dimensions suffisantes, siège stable à hauteur réglable avec dossier adaptable en hauteur et en inclinaison, et repose-pieds disponible sur demande." },
+
+  // SIGNALISATION
+  { theme: "Signalisation", ref: "Art. III.6-6 §1 + III.6-7 CBET", title: "Conformité de la signalisation de sécurité",
+    text: "Art. III.6-6 §1 CBET (Livre III, Titre 6) : la signalisation de sécurité et de santé au travail se fait de façon permanente au moyen de panneaux conformes aux prescriptions des annexes III.6-1 et III.6-2, notamment pour les interdictions, avertissements, obligations, moyens de sauvetage et équipements de lutte contre l'incendie. Art. III.6-7 CBET : la signalisation doit être efficace conformément aux principes généraux de l'annexe III.6-1." },
+  { theme: "Signalisation", ref: "Art. III.6-5 CBET", title: "Usage exclusif de la signalisation",
+    text: "Art. III.6-5 CBET (Livre III, Titre 6) : la signalisation de sécurité et de santé au travail ne peut être utilisée que pour transmettre les messages ou l'information visés par le titre 6. Toute signalisation apposée sans objet réel correspondant (ex : panneau extincteur en l'absence d'extincteur) constitue un manquement à cette obligation." },
+  { theme: "Signalisation", ref: "Art. III.6-4 CBET", title: "Information des travailleurs sur la signalisation",
+    text: "Art. III.6-4 CBET (Livre III, Titre 6) : l'employeur veille à ce que les travailleurs soient informés de toutes les mesures à prendre en ce qui concerne la signalisation de sécurité et de santé au travail." },
+
+  // RISQUE CHIMIQUE
+  { theme: "Risque chimique", ref: "Art. VI.1-6 CBET", title: "Analyse des risques — agents chimiques",
+    text: "Art. VI.1-6 CBET (Livre VI, Titre 1) : l'employeur détermine si des agents chimiques dangereux sont présents sur le lieu de travail et évalue tout risque pour la sécurité et la santé des travailleurs, en tenant compte notamment de leurs propriétés dangereuses, des fiches de données de sécurité (FDS), du niveau, de la nature et de la durée d'exposition par le système respiratoire, par la peau ou par d'autres voies, des conditions dans lesquelles se déroule le travail, des valeurs limites d'exposition professionnelle applicables, et des résultats d'une surveillance de la santé déjà effectuée." },
+  { theme: "Risque chimique", ref: "Art. VI.1-12 CBET", title: "Mesures de prévention générales — agents chimiques",
+    text: "Art. VI.1-12 CBET (Livre VI, Titre 1) : les risques liés aux agents chimiques dangereux sont supprimés ou réduits au minimum notamment par la conception des méthodes de travail, un matériel adéquat, la réduction au minimum du nombre de travailleurs exposés et de la durée d'exposition, des mesures d'hygiène appropriées, la réduction des quantités au strict nécessaire, des procédures assurant la sécurité lors de la manutention, du stockage et du transport des agents chimiques et des déchets en contenant." },
+  { theme: "Risque chimique", ref: "Art. VI.1-12 5° + VI.1-25 CBET", title: "Hygiène des surfaces — déversements",
+    text: "Art. VI.1-12 5° CBET (Livre VI, Titre 1) : l'employeur réduit les risques liés aux agents chimiques dangereux par des mesures d'hygiène appropriées, notamment le nettoyage régulier des surfaces de travail. Art. VI.1-25 CBET : l'employeur prévoit les moyens nécessaires — neutralisants et adsorbants — pour limiter les effets de tout déversement intempestif d'agents chimiques, et veille à ce que les produits émis et le matériel de nettoyage soient enlevés le plus rapidement possible du lieu de travail." },
+  { theme: "Risque chimique", ref: "Art. VI.1-15 et VI.1-16 CBET", title: "Substitution et hiérarchie des mesures",
+    text: "Art. VI.1-15 et VI.1-16 CBET (Livre VI, Titre 1) : l'employeur supprime les risques liés aux agents chimiques dangereux en priorité par substitution — remplacement par un agent moins dangereux. Lorsque la substitution n'est pas possible, il réduit les risques au minimum par ordre de priorité : 1° mesures techniques pour éviter ou réduire la libération d'agents chimiques ; 2° mesures de protection collective à la source, telles qu'une ventilation adéquate ; 3° en dernier recours, mesures de protection individuelle, y compris un EPI." },
+  { theme: "Risque chimique", ref: "Art. III.5-9 CBET + Annexe III.5-1", title: "Rétention des liquides inflammables",
+    text: "Art. III.5-9 CBET (Livre III, Titre 5) + Annexe III.5-1 : le sol des aires de dépôt de liquides inflammables doit être exécuté en forme de cuvette, en matériaux ininflammables, étanche et résistant aux liquides contenus. La contenance de la cuvette de rétention doit être supérieure ou égale à celle du plus grand récipient et au moins égale au quart du volume total des récipients stockés." },
+
+  // RISQUE BIOLOGIQUE
+  { theme: "Risque biologique", ref: "Art. VII.1-4, VII.1-5 et VII.1-7 CBET", title: "Analyse des risques biologiques",
+    text: "Art. VII.1-4 et VII.1-5 CBET (Livre VII, Titre 1) : pour toute activité susceptible de présenter un risque lié à l'exposition à des agents biologiques, l'employeur détermine, en collaboration avec le conseiller en prévention compétent et le conseiller en prévention-médecin du travail, la nature, le degré et la durée de l'exposition des travailleurs afin d'évaluer tout risque pour leur santé et sécurité, de déterminer les mesures à prendre et d'identifier les travailleurs nécessitant des mesures spéciales de protection. Art. VII.1-7 CBET : cette analyse des risques doit être renouvelée régulièrement et en tout cas lors de tout changement des conditions d'exposition ou si un travailleur est atteint d'une infection liée à son travail." },
+  { theme: "Risque biologique", ref: "Art. VII.1-15 et VII.1-16 CBET", title: "Prévention et réduction de l'exposition biologique",
+    text: "Art. VII.1-15 et VII.1-16 CBET (Livre VII, Titre 1) : l'exposition des travailleurs aux agents biologiques doit être évitée en priorité par des mesures appropriées de confinement physique. Lorsque cela n'est pas techniquement possible, l'employeur réduit les risques au niveau le plus bas possible par : la conception des processus de travail pour minimiser la dissémination, la limitation du nombre de travailleurs exposés, des mesures de protection collective puis individuelle, des mesures d'hygiène, la manipulation et le transport sûrs des agents biologiques, la collecte et l'élimination sûres des déchets dans des récipients identifiables, l'utilisation du panneau de danger biologique, et l'établissement de plans d'action en cas d'accident." },
+  { theme: "Risque biologique", ref: "Art. VII.1-33 CBET", title: "Mesures d'hygiène — agents biologiques",
+    text: "Art. VII.1-33 CBET (Livre VII, Titre 1) : pour toutes les activités impliquant une exposition à des agents biologiques, l'employeur interdit aux travailleurs de manger ou de boire dans les zones de travail susceptibles d'être contaminées, met à leur disposition des salles d'eau et sanitaires appropriés ainsi que, si nécessaire, des gouttes pour les yeux ou des antiseptiques pour la peau." },
+  { theme: "Risque biologique", ref: "Art. VII.1-34 et VII.1-35 CBET", title: "EPI et vêtements de protection biologiques",
+    text: "Art. VII.1-34 et VII.1-35 CBET (Livre VII, Titre 1) : l'employeur fournit aux travailleurs exposés à des agents biologiques des vêtements de protection appropriés, vérifiés et nettoyés avant et après chaque utilisation. Ces vêtements doivent être enlevés avant de quitter la zone de travail, rangés séparément des vêtements personnels, et désinfectés, nettoyés ou détruits selon les cas. Le coût de l'ensemble de ces mesures d'hygiène est à charge exclusive de l'employeur." },
+  { theme: "Risque biologique", ref: "Art. VII.1-51, VII.1-52 et VII.1-54 CBET", title: "Vaccination des travailleurs exposés",
+    text: "Art. VII.1-51, VII.1-52 et VII.1-54 CBET (Livre VII, Titre 1) : si l'analyse des risques révèle une exposition à des agents biologiques pour lesquels un vaccin efficace est disponible, l'employeur doit donner la possibilité aux travailleurs non encore immunisés de se faire vacciner. Il les informe à l'embauche des avantages et inconvénients de la vaccination. La vaccination ne peut en aucun cas se substituer aux mesures de prévention collectives et individuelles." },
+
+  // SERVICE PRÉVENTION
+  { theme: "Service prévention", ref: "Art. II.3-53 et II.3-55 CBET", title: "Visite des lieux de travail et rapport",
+    text: "Art. II.3-53 et II.3-55 CBET : le conseiller en prévention du service externe effectue des visites des lieux de travail. Il examine les conditions de travail et formule des avis et recommandations en matière de bien-être des travailleurs. Il rédige un rapport de visite qu'il transmet à l'employeur et tient à la disposition du Comité pour la prévention et la protection au travail." }
+];
+
+// =====================================================================
+// LOGIQUE BIBLIOTHÈQUE
+// =====================================================================
+let currentTargetId = null;
+let openThemes = {};
+
+function openBiblio(obsId) {
+  currentTargetId = obsId;
+  document.getElementById('biblio-search').value = '';
+  renderBiblio();
+  document.getElementById('biblio-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('biblio-search').focus(), 100);
 }
 
-function buildObsHTML(id) {
-  return `
-    <div class="obs-hdr" id="hdr-${id}">
-      <div class="obs-num" id="num-${id}">${id}</div>
-      <input class="obs-loc-input" id="loc-${id}" type="text" placeholder="Localisation…" oninput="scheduleSave()">
-      <button class="btn-del" onclick="delObs(${id})">✕</button>
-    </div>
-    <div class="prio-wrap">
-      <label>Niveau de priorité</label>
-      <select class="prio-select" id="prio-${id}" onchange="updatePrio(${id})">
-        <option value="">Choisir…</option>
-        <option value="URGENT">🔴 URGENT</option>
-        <option value="MOYEN TERME">🟠 MOYEN TERME</option>
-        <option value="À VÉRIFIER">🔵 À VÉRIFIER</option>
-        <option value="CONFORME">🟢 CONFORME</option>
-      </select>
-    </div>
-    <div class="obs-field">
-      <label>Constatation(s)</label>
-      <textarea id="const-${id}" placeholder="Décrivez l'anomalie observée…" oninput="scheduleSave()"></textarea>
-    </div>
-    <div class="obs-field">
-      <label>Recommandation(s)</label>
-      <textarea id="reco-${id}" placeholder="Mesures de prévention à mettre en place…" oninput="scheduleSave()"></textarea>
-    </div>
-    <div class="obs-field">
-      <label>Référence légale (CBET 2017)</label>
-      <textarea id="ref-${id}" class="small" placeholder="ex: Art. III.1-5 CBET…" oninput="scheduleSave()"></textarea>
-    </div>
-    <div class="photo-zone">
-      <label>📷 Photo(s)</label>
-      <div class="photo-btns">
-        <div class="photo-btn photo-btn-cam" onclick="document.getElementById('fcam-${id}').click()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          Appareil photo
-        </div>
-        <div class="photo-btn photo-btn-gal" onclick="document.getElementById('fgal-${id}').click()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          Galerie
-        </div>
-      </div>
-      <div class="photo-grid" id="photos-${id}"></div>
-      <input type="file" class="hidden-file" id="fcam-${id}" accept="image/*" capture="environment" onchange="handlePhotos(${id},this)">
-      <input type="file" class="hidden-file" id="fgal-${id}" accept="image/*" multiple onchange="handlePhotos(${id},this)">
-    </div>`;
+function closeBiblio() {
+  document.getElementById('biblio-overlay').classList.remove('open');
+  currentTargetId = null;
+}
+
+function closeBiblioIfOutside(e) {
+  if (e.target === document.getElementById('biblio-overlay')) closeBiblio();
+}
+
+function insertArticle(text) {
+  if (!currentTargetId) return;
+  const ta = document.getElementById('ref-' + currentTargetId);
+  if (!ta) return;
+  const cur = ta.value.trim();
+  ta.value = cur ? cur + '\n' + text : text;
+  ta.dispatchEvent(new Event('input'));
+  closeBiblio();
+  ta.focus();
+  ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function toggleTheme(theme) {
+  openThemes[theme] = !openThemes[theme];
+  renderBiblio();
+}
+
+function renderBiblio() {
+  const q = document.getElementById('biblio-search').value.toLowerCase().trim();
+  const body = document.getElementById('biblio-body');
+
+  // Grouper par thème
+  const themes = {};
+  BIBLIO.forEach(a => {
+    const match = !q ||
+      a.ref.toLowerCase().includes(q) ||
+      a.title.toLowerCase().includes(q) ||
+      a.text.toLowerCase().includes(q) ||
+      a.theme.toLowerCase().includes(q);
+    if (!match) return;
+    if (!themes[a.theme]) themes[a.theme] = [];
+    themes[a.theme].push(a);
+  });
+
+  if (Object.keys(themes).length === 0) {
+    body.innerHTML = '<div class="biblio-empty">Aucun article ne correspond à votre recherche.</div>';
+    return;
+  }
+
+  let html = '';
+  Object.entries(themes).forEach(([theme, articles]) => {
+    const isOpen = q ? true : (openThemes[theme] !== false);
+    const chevron = isOpen ? '▲' : '▼';
+    html += `<div class="biblio-theme">
+      <div class="biblio-theme-title" onclick="toggleTheme('${theme.replace(/'/g,"\\'")}')">
+        <span>${theme} <span style="font-weight:normal;opacity:0.6;">(${articles.length})</span></span>
+        <span class="biblio-theme-chevron ${isOpen ? 'open' : ''}">${chevron}</span>
+      </div>`;
+    if (isOpen) {
+      html += `<div class="biblio-articles">`;
+      articles.forEach((a, i) => {
+        const textEsc = a.text.replace(/'/g, "\\'").replace(/\n/g, '\\n');
+        html += `<div class="biblio-art">
+          <div class="biblio-art-head">
+            <span class="biblio-art-ref">${a.ref}</span>
+            <span class="biblio-art-title">${a.title}</span>
+            <button class="biblio-art-btn" onclick="insertArticle('${textEsc}')">Insérer ↵</button>
+          </div>
+          <div class="biblio-art-text">${a.text}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+  body.innerHTML = html;
+}
+
+// Fermer avec Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBiblio(); });
+
+// =====================================================================
+// LOGIQUE RAPPORT VLT (inchangée)
+// =====================================================================
+let obsCount = 0;
+
+function priorityClass(val) {
+  if (val === 'URGENT') return 'p-urgent';
+  if (val === 'MOYEN TERME') return 'p-moyen';
+  if (val === 'À VÉRIFIER') return 'p-verif';
+  if (val === 'CONFORME') return 'p-conforme';
+  return '';
 }
 
 function addObs() {
   obsCount++;
   const id = obsCount;
+  const list = document.getElementById('obs-list');
   const card = document.createElement('div');
   card.className = 'obs-card';
   card.id = 'obs-' + id;
   card.innerHTML = buildObsHTML(id);
-  document.getElementById('obs-list').appendChild(card);
-  updateSynthese(); scheduleSave();
-  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  setTimeout(() => document.getElementById('loc-' + id).focus(), 400);
+  list.appendChild(card);
+  updateSynthese();
+  scheduleSave();
+  card.querySelector(`#loc-${id}`).focus();
 }
 
 function updatePrio(id) {
   const sel = document.getElementById('prio-' + id);
-  const v = sel.value;
-  sel.className = 'prio-select ' + prioClass(v);
-  const card = document.getElementById('obs-' + id);
-  card.className = 'obs-card ' + prioClass(v);
-  updateSynthese(); scheduleSave();
+  sel.className = priorityClass(sel.value);
+  updateSynthese();
+  scheduleSave();
 }
 
 function delObs(id) {
   const card = document.getElementById('obs-' + id);
   if (card && confirm('Supprimer cette observation ?')) {
-    card.remove(); renumberObs(); updateSynthese(); scheduleSave();
+    card.remove();
+    updateSynthese();
+    scheduleSave();
   }
 }
 
-function renumberObs() {
-  document.querySelectorAll('.obs-card').forEach((card, i) => {
-    const m = card.id.match(/obs-(\d+)/);
-    if (m) { const el = document.getElementById('num-' + m[1]); if (el) el.textContent = i + 1; }
-  });
-}
+function triggerCamera(id) { document.getElementById('file-cam-' + id).click(); }
+function triggerGallery(id) { document.getElementById('file-gal-' + id).click(); }
 
 function handlePhotos(id, input) {
-  Array.from(input.files).forEach(f => {
+  const grid = document.getElementById('photos-' + id);
+  Array.from(input.files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => { addPhotoSrc(id, e.target.result, ''); scheduleSave(); };
-    reader.readAsDataURL(f);
+    reader.onload = function(e) {
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-thumb';
+      thumb.innerHTML = `<img src="${e.target.result}" alt="Photo observation"><button class="photo-del" onclick="this.parentElement.remove();scheduleSave()" title="Supprimer la photo">✕</button>`;
+      grid.appendChild(thumb);
+      scheduleSave();
+    };
+    reader.readAsDataURL(file);
   });
   input.value = '';
 }
 
-function addPhotoSrc(id, src, caption) {
-  const grid = document.getElementById('photos-' + id);
-  const thumb = document.createElement('div');
-  thumb.className = 'photo-thumb';
-  const capVal = (caption || '').replace(/"/g, '&quot;');
-  thumb.innerHTML = `
-    <img src="${src}" alt="Photo" onclick="openLightbox('${src.replace(/'/g,"\\'")}', this.parentElement.querySelector('input').value)">
-    <button class="photo-del" onclick="this.parentElement.remove();scheduleSave()">✕</button>
-    <div class="photo-caption"><input type="text" placeholder="Légende…" value="${capVal}" oninput="scheduleSave()"></div>`;
-  grid.appendChild(thumb);
-}
-
-function openLightbox(src, cap) {
-  document.getElementById('lb-img').src = src;
-  document.getElementById('lb-cap').textContent = cap || '';
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
 function updateSynthese() {
   const urgents = [];
-  document.querySelectorAll('.obs-card').forEach((card, i) => {
-    const m = card.id.match(/obs-(\d+)/);
-    if (!m) return;
-    const id = m[1];
+  document.querySelectorAll('.obs-card').forEach(card => {
+    const idMatch = card.id.match(/obs-(\d+)/);
+    if (!idMatch) return;
+    const id = idMatch[1];
     const prio = document.getElementById('prio-' + id);
-    const loc  = document.getElementById('loc-'  + id);
-    if (prio && prio.value === 'URGENT') urgents.push(loc && loc.value.trim() ? loc.value.trim() : 'Obs. ' + (i+1));
+    const loc = document.getElementById('loc-' + id);
+    if (prio && prio.value === 'URGENT') {
+      urgents.push((loc && loc.value) ? loc.value : 'Point ' + id);
+    }
   });
-  const titre = document.getElementById('synth-titre');
-  const liste  = document.getElementById('synthese-liste');
-  if (!urgents.length) {
+  const titre = document.getElementById('synthese-urgents-titre');
+  const liste = document.getElementById('synthese-urgents-liste');
+  if (urgents.length === 0) {
     titre.textContent = 'Points urgents à traiter immédiatement :';
-    liste.textContent = "— Aucun point urgent pour l'instant —";
+    liste.textContent = '— Aucun point urgent pour l\'instant —';
     liste.style.fontStyle = 'italic';
   } else {
-    titre.textContent = urgents.length + ' point' + (urgents.length > 1 ? 's' : '') + ' urgent' + (urgents.length > 1 ? 's' : '') + ' :';
-    liste.innerHTML = urgents.map(u => `• ${u}`).join('<br>');
+    titre.textContent = urgents.length + ' point' + (urgents.length > 1 ? 's' : '') + ' urgent' + (urgents.length > 1 ? 's' : '') + ' à traiter immédiatement :';
+    liste.textContent = urgents.join(' | ');
     liste.style.fontStyle = 'normal';
   }
 }
 
+const SAVE_KEY = 'vlt_rapport_vierge_v2';
+let saveTimer = null;
+
 function showSaveStatus(msg, color) {
   const el = document.getElementById('save-status');
-  el.textContent = msg; el.style.color = color || '#3B6D11'; el.style.opacity = '1';
-  clearTimeout(el._t); el._t = setTimeout(() => { el.style.opacity = '0.3'; }, 2500);
-}
-function scheduleSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveData, 1200);
-  showSaveStatus('…', '#854F0B');
+  el.textContent = msg;
+  el.style.color = color || '#3B6D11';
+  el.style.opacity = '1';
+  clearTimeout(el._fadeTimer);
+  el._fadeTimer = setTimeout(() => { el.style.opacity = '0.4'; }, 3000);
 }
 
 function collectData() {
-  const infos = [...document.querySelectorAll('.info-rows .info-row input')].map(el => el.value);
-  const obs = [];
+  const data = {
+    ref: document.getElementById('ref').value,
+    dateRapport: document.getElementById('date-rapport').value,
+    dateSign: document.getElementById('date-sign').value,
+    synthesePlan: document.querySelector('.synthese-body textarea').value,
+    infos: [],
+    obs: []
+  };
+  document.querySelectorAll('.info-value input').forEach((el, i) => { data.infos[i] = el.value; });
   document.querySelectorAll('.obs-card').forEach(card => {
     const m = card.id.match(/obs-(\d+)/);
     if (!m) return;
     const id = m[1];
     const photos = [];
-    card.querySelectorAll('.photo-thumb').forEach(thumb => {
-      const img = thumb.querySelector('img');
-      const cap = thumb.querySelector('input');
-      if (img) photos.push({ src: img.src, caption: cap ? cap.value : '' });
-    });
-    obs.push({
+    card.querySelectorAll('.photo-thumb img').forEach(img => photos.push(img.src));
+    data.obs.push({
       id,
-      loc:    (document.getElementById('loc-'+id)||{}).value||'',
-      prio:   (document.getElementById('prio-'+id)||{}).value||'',
-      const_: (document.getElementById('const-'+id)||{}).value||'',
-      reco:   (document.getElementById('reco-'+id)||{}).value||'',
-      ref:    (document.getElementById('ref-'+id)||{}).value||'',
+      loc: (document.getElementById('loc-' + id) || {}).value || '',
+      prio: (document.getElementById('prio-' + id) || {}).value || '',
+      const_: (document.getElementById('const-' + id) || {}).value || '',
+      reco: (document.getElementById('reco-' + id) || {}).value || '',
+      ref: (document.getElementById('ref-' + id) || {}).value || '',
       photos
     });
   });
-  return {
-    ref: document.getElementById('inp-ref').value,
-    date: document.getElementById('inp-date').value,
-    dateSign: document.getElementById('inp-date-sign').value,
-    synthesePlan: document.querySelector('.synthese-plan textarea').value,
-    infos, obs
-  };
+  return data;
 }
 
 function saveData() {
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(collectData())); showSaveStatus('✓', '#3B6D11'); }
-  catch(e) { showSaveStatus('⚠', '#A32D2D'); }
+  try {
+    const data = collectData();
+    localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    showSaveStatus('✓ Sauvegardé', '#3B6D11');
+  } catch(e) {
+    showSaveStatus('⚠ Erreur sauvegarde', '#A32D2D');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveData, 1200);
+  showSaveStatus('…en cours', '#854F0B');
 }
 
 function restoreData() {
@@ -577,218 +741,181 @@ function restoreData() {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) { addObs(); return; }
     const data = JSON.parse(raw);
-    if (data.ref)          document.getElementById('inp-ref').value = data.ref;
-    if (data.date)         document.getElementById('inp-date').value = data.date;
-    if (data.dateSign)     document.getElementById('inp-date-sign').value = data.dateSign;
-    if (data.synthesePlan) document.querySelector('.synthese-plan textarea').value = data.synthesePlan;
-    const infoInputs = document.querySelectorAll('.info-rows .info-row input');
-    (data.infos||[]).forEach((v,i) => { if (infoInputs[i]) infoInputs[i].value = v; });
+    if (data.ref) document.getElementById('ref').value = data.ref;
+    if (data.dateRapport) document.getElementById('date-rapport').value = data.dateRapport;
+    if (data.dateSign) document.getElementById('date-sign').value = data.dateSign;
+    if (data.synthesePlan) document.querySelector('.synthese-body textarea').value = data.synthesePlan;
+    const infoInputs = document.querySelectorAll('.info-value input');
+    (data.infos || []).forEach((v, i) => { if (infoInputs[i]) infoInputs[i].value = v; });
     if (data.obs && data.obs.length > 0) {
       data.obs.forEach(o => {
         obsCount++;
         const id = obsCount;
+        const list = document.getElementById('obs-list');
         const card = document.createElement('div');
-        card.className = 'obs-card ' + prioClass(o.prio||'');
+        card.className = 'obs-card';
         card.id = 'obs-' + id;
         card.innerHTML = buildObsHTML(id);
-        document.getElementById('obs-list').appendChild(card);
-        document.getElementById('loc-'+id).value    = o.loc    || '';
-        document.getElementById('const-'+id).value  = o.const_ || '';
-        document.getElementById('reco-'+id).value   = o.reco   || '';
-        document.getElementById('ref-'+id).value    = o.ref    || '';
-        const sel = document.getElementById('prio-'+id);
-        if (o.prio) { sel.value = o.prio; sel.className = 'prio-select ' + prioClass(o.prio); }
-        (o.photos||[]).forEach(p => addPhotoSrc(id, p.src, p.caption||''));
+        list.appendChild(card);
+        document.getElementById('loc-' + id).value = o.loc || '';
+        document.getElementById('const-' + id).value = o.const_ || '';
+        document.getElementById('reco-' + id).value = o.reco || '';
+        document.getElementById('ref-' + id).value = o.ref || '';
+        const sel = document.getElementById('prio-' + id);
+        if (o.prio) { sel.value = o.prio; sel.className = priorityClass(o.prio); }
+        if (o.photos && o.photos.length > 0) {
+          const grid = document.getElementById('photos-' + id);
+          o.photos.forEach(src => {
+            const thumb = document.createElement('div');
+            thumb.className = 'photo-thumb';
+            thumb.innerHTML = `<img src="${src}" alt="Photo observation"><button class="photo-del" onclick="this.parentElement.remove();scheduleSave()" title="Supprimer la photo">✕</button>`;
+            grid.appendChild(thumb);
+          });
+        }
       });
-    } else { addObs(); }
-    updateSynthese(); showSaveStatus('✓', '#185FA5');
-  } catch(e) { addObs(); }
+    } else {
+      addObs();
+    }
+    updateSynthese();
+    showSaveStatus('✓ Données restaurées', '#185FA5');
+  } catch(e) {
+    addObs();
+  }
 }
 
 function clearSave() {
-  if (confirm('Effacer toutes les données et recommencer ?')) { localStorage.removeItem(SAVE_KEY); location.reload(); }
+  if (confirm('Effacer toutes les données sauvegardées et recommencer à zéro ?')) {
+    localStorage.removeItem(SAVE_KEY);
+    location.reload();
+  }
 }
 
-function exportWord() {
-  showSaveStatus('⏳', '#185FA5');
-  const data = collectData();
-  const infoLabels = [...document.querySelectorAll('.info-rows .info-row label')].map(el => el.textContent.trim());
-  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-body{font-family:Arial,sans-serif;font-size:11pt;color:#2C2C2A;margin:2cm;}
-.hblk{background:#1B4F8A;color:white;padding:16px;margin-bottom:16px;}
-.stitle{font-size:9pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;border-bottom:2px solid #1B4F8A;margin:14px 0 6px;padding-bottom:3px;}
-table.info{width:100%;border-collapse:collapse;margin-bottom:10px;}
-table.info td{border:1px solid #D3D1C7;padding:5px 8px;font-size:10pt;}
-table.info td.lbl{background:#E6F1FB;color:#1B4F8A;font-weight:bold;width:36%;}
-.obs{border:1px solid #D3D1C7;border-radius:4px;margin-bottom:12px;page-break-inside:avoid;}
-.obs-hd{padding:7px 12px;border-bottom:1px solid #D3D1C7;}
-.obs-hd.hU{background:#FCEBEB;}.obs-hd.hM{background:#FAEEDA;}.obs-hd.hV{background:#E6F1FB;}.obs-hd.hC{background:#EAF3DE;}
-.obs-hd strong{color:#1B4F8A;}.pf{float:right;}
-.bdg{display:inline-block;padding:2px 8px;border-radius:3px;font-size:8pt;font-weight:bold;}
-.bU{background:#FCEBEB;color:#A32D2D;}.bM{background:#FAEEDA;color:#854F0B;}.bV{background:#E6F1FB;color:#185FA5;}.bC{background:#EAF3DE;color:#3B6D11;}
-table.ob{width:100%;border-collapse:collapse;}
-table.ob td{border:1px solid #D3D1C7;padding:7px 10px;vertical-align:top;width:50%;}
-table.ob td.full{width:100%;}
-.fl{font-size:8pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;display:block;margin-bottom:3px;}
-.prow{padding:7px 10px;border-top:1px solid #D3D1C7;}
-.prow img{width:170px;height:130px;object-fit:cover;margin:4px 4px 0 0;border:1px solid #D3D1C7;border-radius:3px;vertical-align:top;}
-.sU{background:#FCEBEB;border:1px solid #F7C1C1;padding:8px 12px;border-radius:4px;margin-bottom:8px;}
-.sU strong{color:#A32D2D;font-size:10pt;}.sU p{color:#A32D2D;margin-top:4px;}
-.sbody{border:1px solid #D3D1C7;padding:8px 12px;border-radius:4px;font-size:10pt;}
-.sig{margin-top:20px;border-top:1px solid #D3D1C7;padding-top:12px;display:flex;justify-content:space-between;font-size:9pt;color:#5F5E5A;}
-.sig-r{text-align:right;}.sig-r strong{color:#1B4F8A;font-size:11pt;display:block;}
-</style></head><body>
-<div class="hblk">
-  <div style="float:right;text-align:right;font-size:9pt;color:white;">Réf. ${data.ref}<br>${data.date}</div>
-  <div style="color:white;font-size:20pt;font-weight:900;">CESI</div>
-  <div style="color:white;font-size:13pt;font-weight:bold;margin:4px 0;">RAPPORT DE VISITE DES LIEUX DE TRAVAIL</div>
-  <p style="color:white;font-size:9pt;margin:2px 0;">Conformément aux art. II.3-53 et II.3-55 CBET — Loi du 4 août 1996</p>
-  <p style="color:white;font-size:9pt;margin:2px 0;">Service Externe de Prévention et de Protection au Travail (SEPP)</p>
-</div>
-<div class="stitle">Informations générales</div>
-<table class="info">`;
-  infoLabels.forEach((lbl,i) => { html += `<tr><td class="lbl">${lbl}</td><td>${data.infos[i]||''}</td></tr>`; });
-  html += `</table><div class="stitle">Constatations et recommandations</div>`;
-  data.obs.forEach((o,i) => {
-    const pc = o.prio==='URGENT'?'bU':o.prio==='MOYEN TERME'?'bM':o.prio==='À VÉRIFIER'?'bV':o.prio==='CONFORME'?'bC':'';
-    const hc = o.prio==='URGENT'?'hU':o.prio==='MOYEN TERME'?'hM':o.prio==='À VÉRIFIER'?'hV':o.prio==='CONFORME'?'hC':'';
-    html += `<div class="obs"><div class="obs-hd ${hc}"><span class="pf">${o.prio?`<span class="bdg ${pc}">${o.prio}</span>`:''}</span><strong>${i+1}. ${o.loc||'Localisation non renseignée'}</strong></div>
-    <table class="ob"><tr>
-      <td><span class="fl">Constatation(s)</span>${(o.const_||'').replace(/\n/g,'<br>')}</td>
-      <td><span class="fl">Recommandation(s)</span>${(o.reco||'').replace(/\n/g,'<br>')}</td>
-    </tr><tr><td colspan="2" class="full"><span class="fl">Référence légale (CBET 2017)</span>${(o.ref||'').replace(/\n/g,'<br>')}</td></tr></table>`;
-    if (o.photos && o.photos.length) {
-      html += `<div class="prow"><span class="fl">Photo(s)</span><br>`;
-      o.photos.forEach(p => { html += `<span style="display:inline-block;margin-right:6px;text-align:center;vertical-align:top;"><img src="${p.src}">${p.caption?`<br><small style="color:#666;">${p.caption}</small>`:''}</span>`; });
-      html += `</div>`;
-    }
-    html += `</div>`;
-  });
-  const urgents = data.obs.filter(o => o.prio === 'URGENT').map(o => o.loc||'?');
-  html += `<div class="stitle">Synthèse et suites à donner</div>
-<div class="sU"><strong>${urgents.length} point${urgents.length>1?'s':''} urgent${urgents.length>1?'s':''} :</strong><p>${urgents.length?urgents.join(' | '):'— Aucun —'}</p></div>
-<div class="sbody">${data.synthesePlan}</div>
-<div class="sig">
-  <div>Fait à Bruxelles, le ${data.dateSign}<br><br>CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles<br>T: 02 771 00 25 | faical.dahmani@cesi.be</div>
-  <div class="sig-r"><strong>Faïçal DAHMANI</strong>Conseiller en prévention niveau 1<br>SEPP – CESI</div>
-</div></body></html>`;
-  const blob = new Blob(['\ufeff'+html], {type:'application/msword;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const ent = (data.infos[0]||'VLT').replace(/[^a-zA-Z0-9]/g,'_');
-  const dt = data.date.replace(/\//g,'-')||'date';
-  a.href=url; a.download=`VLT_${ent}_${dt}.doc`; a.click(); URL.revokeObjectURL(url);
-  showSaveStatus('✓', '#3B6D11');
-}
-
-function saveHTMLFile() {
-  showSaveStatus('⏳', '#185FA5');
-  const data = collectData();
-  const clone = document.documentElement.cloneNode(true);
-  clone.querySelector('#inp-ref').value = data.ref;
-  clone.querySelector('#inp-date').value = data.date;
-  clone.querySelector('#inp-date-sign').value = data.dateSign;
-  clone.querySelector('.synthese-plan textarea').value = data.synthesePlan;
-  const ci = clone.querySelectorAll('.info-rows .info-row input');
-  (data.infos||[]).forEach((v,i) => { if (ci[i]) ci[i].value = v; });
-  clone.querySelector('#obs-list').innerHTML = document.querySelector('#obs-list').innerHTML;
-  const ent = (data.infos[0]||'VLT').replace(/[^a-zA-Z0-9]/g,'_');
-  const dt  = data.date.replace(/\//g,'-')||new Date().toISOString().slice(0,10);
-  const newKey = `vlt_${ent}_${dt}`;
-  clone.querySelectorAll('script').forEach(s => {
-    if (s.textContent.includes('SAVE_KEY')) s.textContent = s.textContent.replace(/const SAVE_KEY = '[^']+';/, `const SAVE_KEY = '${newKey}';`);
-  });
-  const blob = new Blob(['<!DOCTYPE html>\n'+clone.outerHTML], {type:'text/html;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href=url; a.download=`VLT_${ent}_${dt}.html`; a.click(); URL.revokeObjectURL(url);
-  showSaveStatus('✓', '#3B6D11');
+function buildObsHTML(id) {
+  return `
+    <div class="obs-header">
+      <div class="obs-num">${id}</div>
+      <div class="obs-header-title">
+        <input type="text" placeholder="Localisation (ex: Rez-de-chaussée – Bureau d'accueil)" id="loc-${id}" oninput="scheduleSave()">
+      </div>
+      <div class="obs-priority">
+        <select id="prio-${id}" onchange="updatePrio(${id})" class="">
+          <option value="">Priorité...</option>
+          <option value="URGENT">🔴 URGENT</option>
+          <option value="MOYEN TERME">🟠 MOYEN TERME</option>
+          <option value="À VÉRIFIER">🔵 À VÉRIFIER</option>
+          <option value="CONFORME">🟢 CONFORME</option>
+        </select>
+      </div>
+      <button class="btn-del" onclick="delObs(${id})" title="Supprimer">✕</button>
+    </div>
+    <div class="obs-body">
+      <div class="obs-field">
+        <label>Constatation(s)</label>
+        <textarea id="const-${id}" rows="4" placeholder="Décrivez l'anomalie observée…" oninput="scheduleSave()"></textarea>
+      </div>
+      <div class="obs-field">
+        <label>Recommandation(s)</label>
+        <textarea id="reco-${id}" rows="4" placeholder="Décrivez les mesures de prévention à mettre en place…" oninput="scheduleSave()"></textarea>
+      </div>
+      <div class="obs-field full">
+        <div class="ref-label-row">
+          <label>Référence légale (CBET 2017)</label>
+          <button class="btn-biblio" onclick="openBiblio(${id})">📚 Bibliothèque CBET</button>
+        </div>
+        <textarea id="ref-${id}" rows="2" placeholder="Cliquez sur « Bibliothèque CBET » pour sélectionner un article, ou saisissez directement…" oninput="scheduleSave()"></textarea>
+      </div>
+      <div class="photo-zone">
+        <label>Photo(s)</label>
+        <div class="photo-btns">
+          <div class="photo-btn btn-camera" onclick="triggerCamera(${id})" title="Prendre une photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            📷 Appareil photo
+          </div>
+          <div class="photo-btn btn-gallery" onclick="triggerGallery(${id})" title="Choisir depuis la galerie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            🖼 Galerie
+          </div>
+        </div>
+        <div class="photo-grid" id="photos-${id}"></div>
+        <input type="file" class="hidden-input" id="file-cam-${id}" accept="image/*" capture="environment" onchange="handlePhotos(${id}, this)">
+        <input type="file" class="hidden-input" id="file-gal-${id}" accept="image/*" multiple onchange="handlePhotos(${id}, this)">
+      </div>
+    </div>
+  `;
 }
 
 restoreData();
 document.addEventListener('input', scheduleSave);
 document.addEventListener('change', scheduleSave);
 
-// ─── MOT DE PASSE & PROTECTION ────────────────────────────
-const PWD_HASH = hashStr('VLT-dahmani');
-let editUnlocked = false;
-
-function hashStr(s) {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) { h = (Math.imul(31, h) + s.charCodeAt(i)) | 0; }
-  return h;
-}
-
-function checkLock() {
-  const val = document.getElementById('lock-input').value;
-  if (hashStr(val) === PWD_HASH) {
-    document.getElementById('lock-overlay').classList.add('hidden');
-    document.getElementById('lock-input').value = '';
-    applyLockState();
-  } else {
-    const err = document.getElementById('lock-error');
-    err.textContent = 'Mot de passe incorrect. Veuillez réessayer.';
-    document.getElementById('lock-input').value = '';
-    document.getElementById('lock-input').focus();
-    setTimeout(() => { err.textContent = ''; }, 3000);
-  }
-}
-
-function applyLockState() {
-  const locked = !editUnlocked;
-  const bar = document.getElementById('edit-lock-bar');
-  bar.classList.toggle('hidden', !locked);
-  document.querySelectorAll('input:not(#lock-input):not(#modal-input), textarea, select').forEach(el => {
-    el.readOnly = locked;
-    el.disabled = locked && el.tagName === 'SELECT';
-    el.style.pointerEvents = locked ? 'none' : '';
-    el.style.userSelect = locked ? 'none' : '';
+function exportWord() {
+  showSaveStatus('⏳ Génération Word…', '#185FA5');
+  const data = collectData();
+  const infoInputs = document.querySelectorAll('.info-value input');
+  const infoLabels = document.querySelectorAll('.info-label');
+  const infos = [];
+  infoLabels.forEach((lbl, i) => { infos.push({ label: lbl.textContent.trim(), value: infoInputs[i] ? infoInputs[i].value : '' }); });
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;font-size:11pt;color:#2C2C2A;margin:2cm;}h1{font-size:13pt;color:white;background:#1B4F8A;padding:12px 16px;margin:0;}.header-block{background:#1B4F8A;color:white;padding:16px;margin-bottom:16px;}.header-block p{color:white;font-size:9pt;margin:2px 0;}.ref{float:right;text-align:right;font-size:9pt;}.section-title{font-size:9pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid #1B4F8A;margin:16px 0 8px;padding-bottom:3px;}table.info{width:100%;border-collapse:collapse;margin-bottom:12px;}table.info td{border:1px solid #D3D1C7;padding:5px 8px;font-size:10pt;}table.info td.lbl{background:#E6F1FB;color:#1B4F8A;font-weight:bold;width:38%;}.badges{margin:6px 0 12px;}.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:8pt;font-weight:bold;margin:2px;}.b-urg{background:#FCEBEB;color:#A32D2D;}.b-moy{background:#FAEEDA;color:#854F0B;}.b-ver{background:#E6F1FB;color:#185FA5;}.b-con{background:#EAF3DE;color:#3B6D11;}.obs{border:1px solid #D3D1C7;border-radius:4px;margin-bottom:12px;page-break-inside:avoid;overflow:hidden;}.obs-head{background:#F7F7F5;padding:6px 12px;border-bottom:1px solid #D3D1C7;}.obs-head strong{color:#1B4F8A;font-size:11pt;}.obs-head .prio{float:right;}table.obs-body{width:100%;border-collapse:collapse;}table.obs-body td{border:1px solid #D3D1C7;padding:6px 10px;vertical-align:top;width:50%;}table.obs-body td.full{width:100%;}.field-label{font-size:8pt;font-weight:bold;color:#1B4F8A;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px;}.field-val{font-size:10pt;}.photo-row{padding:6px 10px;border-top:1px solid #D3D1C7;}.photo-row img{width:180px;height:140px;object-fit:cover;margin-right:6px;border:1px solid #D3D1C7;border-radius:3px;}.syn-urg{background:#FCEBEB;border:1px solid #F7C1C1;padding:8px 12px;border-radius:4px;margin-bottom:8px;}.syn-urg strong{color:#A32D2D;font-size:10pt;}.syn-urg p{color:#A32D2D;font-size:10pt;margin:4px 0 0;}.syn-body{border:1px solid #D3D1C7;padding:8px 12px;border-radius:4px;font-size:10pt;}.signature{margin-top:24px;display:flex;justify-content:space-between;font-size:9pt;color:#5F5E5A;border-top:1px solid #D3D1C7;padding-top:12px;}.sig-right{text-align:right;}.sig-right strong{color:#1B4F8A;font-size:11pt;display:block;}</style></head><body>
+  <div class="header-block"><div class="ref">Réf. ${document.getElementById('ref').value}<br>${document.getElementById('date-rapport').value}</div><div style="color:white;font-size:18pt;font-weight:900;letter-spacing:-1px;">CESI</div><h1 style="background:none;color:white;padding:4px 0;font-size:13pt;">RAPPORT DE VISITE DES LIEUX DE TRAVAIL</h1><p>Conformément aux art. II.3-53 et II.3-55 CBET — Loi du 4 août 1996</p><p>Service Externe de Prévention et de Protection au Travail (SEPP)</p></div>
+  <div class="section-title">Informations générales</div><table class="info">`;
+  infos.forEach(r => { html += `<tr><td class="lbl">${r.label}</td><td>${r.value||''}</td></tr>`; });
+  html += `</table><div class="section-title">Légende des niveaux de priorité</div><div class="badges"><span class="badge b-urg">URGENT</span><span class="badge b-moy">MOYEN TERME</span><span class="badge b-ver">À VÉRIFIER</span><span class="badge b-con">CONFORME</span></div><div class="section-title">Constatations et recommandations</div>`;
+  data.obs.forEach(o => {
+    const pc = o.prio==='URGENT'?'b-urg':o.prio==='MOYEN TERME'?'b-moy':o.prio==='À VÉRIFIER'?'b-ver':o.prio==='CONFORME'?'b-con':'';
+    html += `<div class="obs"><div class="obs-head"><span class="prio">${o.prio?`<span class="badge ${pc}">${o.prio}</span>`:''}</span><strong>${o.loc||'Localisation non renseignée'}</strong></div><table class="obs-body"><tr><td><span class="field-label">Constatation(s)</span><span class="field-val">${(o.const_||'').replace(/\n/g,'<br>')}</span></td><td><span class="field-label">Recommandation(s)</span><span class="field-val">${(o.reco||'').replace(/\n/g,'<br>')}</span></td></tr><tr><td colspan="2" class="full"><span class="field-label">Référence légale (CBET 2017)</span><span class="field-val">${(o.ref||'').replace(/\n/g,'<br>')}</span></td></tr></table>`;
+    if (o.photos && o.photos.length > 0) {
+      html += `<div class="photo-row"><span class="field-label">Photo(s)</span><br>`;
+      o.photos.forEach(src => { html += `<img src="${src}">`; });
+      html += `</div>`;
+    }
+    html += `</div>`;
   });
-  document.querySelectorAll('.btn-del, .btn-add, .photo-btn, .tbtn-grey').forEach(el => {
-    el.style.display = locked ? 'none' : '';
+  const urgents = data.obs.filter(o => o.prio==='URGENT').map(o => o.loc||'Point sans localisation');
+  html += `<div class="section-title">Synthèse et suites à donner</div><div class="syn-urg"><strong>${urgents.length} point${urgents.length>1?'s':''} urgent${urgents.length>1?'s':''} à traiter immédiatement :</strong><p>${urgents.length>0?urgents.join(' | '):'— Aucun point urgent —'}</p></div><div class="syn-body">${data.synthesePlan}</div><div class="signature"><div>Fait à Bruxelles, le ${document.getElementById('date-sign').value}<br><br>CESI – Avenue Konrad Adenauerlaan 8, 1200 Bruxelles<br>T: 02 771 00 25 | www.cesi.be</div><div class="sig-right"><strong>Faïçal DAHMANI</strong>Conseiller en prévention niveau 1<br>CESI SEPP</div></div></body></html>`;
+  const blob = new Blob(['\ufeff' + html], { type: 'application/msword;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const entreprise = (document.querySelectorAll('.info-value input')[0].value || 'VLT').replace(/[^a-zA-Z0-9]/g, '_');
+  const date = document.getElementById('date-rapport').value.replace(/\//g, '-') || 'date';
+  a.href = url; a.download = `VLT_${entreprise}_${date}.doc`; a.click();
+  URL.revokeObjectURL(url);
+  showSaveStatus('✓ Word téléchargé', '#3B6D11');
+}
+
+function saveHTMLFile() {
+  showSaveStatus('⏳ Sauvegarde en cours…', '#185FA5');
+  const data = collectData();
+  const clone = document.documentElement.cloneNode(true);
+  const inputs = clone.querySelectorAll('.info-value input');
+  const liveInputs = document.querySelectorAll('.info-value input');
+  inputs.forEach((el, i) => { if (liveInputs[i]) el.value = liveInputs[i].value; });
+  const refEl = clone.querySelector('#ref'); if (refEl) refEl.value = document.getElementById('ref').value;
+  const dateEl = clone.querySelector('#date-rapport'); if (dateEl) dateEl.value = document.getElementById('date-rapport').value;
+  const dateSign = clone.querySelector('#date-sign'); if (dateSign) dateSign.value = document.getElementById('date-sign').value;
+  const synth = clone.querySelector('.synthese-body textarea');
+  const synthLive = document.querySelector('.synthese-body textarea');
+  if (synth && synthLive) synth.value = synthLive.value;
+  const obsListClone = clone.querySelector('#obs-list');
+  const obsListLive = document.querySelector('#obs-list');
+  if (obsListClone && obsListLive) obsListClone.innerHTML = obsListLive.innerHTML;
+  const liveInputs0 = document.querySelectorAll('.info-value input');
+  const entreprise = (liveInputs0[0] ? liveInputs0[0].value : 'VLT').replace(/[^a-zA-Z0-9]/g, '_') || 'VLT';
+  const dateStr = document.getElementById('date-rapport').value.replace(/\//g, '-') || new Date().toISOString().slice(0,10);
+  const newKey = `vlt_${entreprise}_${dateStr}`;
+  const scripts = clone.querySelectorAll('script');
+  scripts.forEach(s => {
+    if (s.textContent.includes('SAVE_KEY')) {
+      s.textContent = s.textContent.replace(/const SAVE_KEY = '[^']+';/, `const SAVE_KEY = '${newKey}';`);
+    }
   });
-  document.querySelectorAll('#fcam-0, #fgal-0').forEach(el => { if(locked) el.disabled = true; });
+  const fullHTML = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `VLT_${entreprise}_${dateStr}.html`; a.click();
+  URL.revokeObjectURL(url);
+  showSaveStatus('✓ Fichier HTML sauvegardé', '#3B6D11');
 }
-
-function openEditModal() {
-  document.getElementById('edit-modal').classList.remove('hidden');
-  setTimeout(() => document.getElementById('modal-input').focus(), 100);
-}
-
-function closeEditModal() {
-  document.getElementById('edit-modal').classList.add('hidden');
-  document.getElementById('modal-input').value = '';
-  document.getElementById('modal-error').textContent = '';
-}
-
-function checkEdit() {
-  const val = document.getElementById('modal-input').value;
-  if (hashStr(val) === PWD_HASH) {
-    editUnlocked = true;
-    closeEditModal();
-    applyLockState();
-  } else {
-    const err = document.getElementById('modal-error');
-    err.textContent = 'Mot de passe incorrect.';
-    document.getElementById('modal-input').value = '';
-    document.getElementById('modal-input').focus();
-    setTimeout(() => { err.textContent = ''; }, 2500);
-  }
-}
-
-// Afficher l'écran de verrouillage au chargement
-window.addEventListener('load', () => {
-  document.getElementById('lock-overlay').classList.remove('hidden');
-  setTimeout(() => document.getElementById('lock-input').focus(), 200);
-});
 </script>
-
-<!-- PIED DE PAGE COPYRIGHT -->
-<div class="copyright-bar">
-  <strong>© 2026 Faïçal DAHMANI – Tous droits réservés</strong><br>
-  Outil VLT – CESI Service Externe de Prévention et de Protection au Travail<br>
-  Reproduction, distribution ou modification interdites sans autorisation écrite.
-</div>
-
 </body>
 </html>
